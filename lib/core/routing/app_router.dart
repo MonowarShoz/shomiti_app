@@ -1,0 +1,71 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:imsomitiapp/core/routing/navigator_observer.dart';
+import 'package:imsomitiapp/core/routing/routes.dart';
+import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
+import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
+import 'package:imsomitiapp/features/splash/presentation/splash_screen.dart';
+
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final refreshNotifier = GoRouterRefreshNotifier(ref);
+  ref.onDispose(refreshNotifier.dispose);
+  //final refreshNotifier = AuthNotifierRefresh(ref);
+  // final auth = ref.watch(authProvider);
+  return GoRouter(
+    initialLocation: Routes.splashScreen,
+    refreshListenable: refreshNotifier,
+    // refreshListenable: refreshNotifier,
+    observers: [LoggingNavigatorObserver()],
+    redirect: (context, state) {
+      // final authState = ref.read(authStatusProvider);
+      final authState = ref.read(newauthStatusProvider);
+      final loc = state.matchedLocation;
+
+      if (authState == AuthStatus.loading) return null;
+
+      // Unauthenticated → go to login/register
+      if (authState == AuthStatus.unauthenticated && loc != Routes.loginScreen && loc != Routes.registerScreen) {
+        return Routes.loginScreen;
+      }
+
+      // Authenticated → prevent access to guest pages
+      if (authState == AuthStatus.authenticated && (loc == Routes.loginScreen || loc == Routes.registerScreen || loc == Routes.splashScreen)) {
+        return Routes.home;
+      }
+
+      // Otherwise → no redirect
+      return null;
+
+      // // 1️⃣ Unauthenticated user: always go to login if not on login/register
+      // if (authState == AuthStatus.unauthenticated && loc != Routes.loginScreen && loc != Routes.registerScreen) {
+      //   return Routes.loginScreen;
+      // }
+
+      // // 2️⃣ Authenticated user: should not visit login/register/splash
+      // if (authState == AuthStatus.authenticated && (loc == Routes.loginScreen || loc == Routes.registerScreen || loc == Routes.splashScreen)) {
+      //   return Routes.home;
+      // }
+
+      // // 3️⃣ All other cases: no redirect
+      // return null;
+    },
+
+   
+    errorBuilder: (context, state) => LoginScreen(),
+    routes: [
+       GoRoute(name: Routes.splashScreen, path: Routes.splashScreen, builder: (context, state) => SplashScreeen()),
+       GoRoute(name: Routes.loginScreen, path: Routes.loginScreen, builder: (context, state) => LoginScreen()),
+      // GoRoute(name: Routes.registerScreen, path: Routes.registerScreen, builder: (context, state) => SchoolRegisterScreen()),
+      // GoRoute(name: Routes.changePass, path: Routes.changePass, builder: (context, state) => ChangePasswordScreen()),
+      // GoRoute(name: Routes.home, path: Routes.home, builder: (context, state) => HomeScreen()),
+      // GoRoute(path: Routes.teachermapping, name: Routes.teachermapping, builder: (context, state) => TeacherMappingScreen()),
+      // GoRoute(path: Routes.homework, name: Routes.homework, builder: (context, state) => HomeWorkScreen()),
+      // GoRoute(path: Routes.allhomework, name: Routes.allhomework, builder: (context, state) => ViewAllHomeworkScreen()),
+      // GoRoute(path: Routes.hwByuser, name: Routes.hwByuser, builder: (context, state) => MyHomeworkListScreen()),
+
+      // GoRoute(path: Routes.hwMap, name: Routes.hwMap, builder: (context, state) => HomeworkMapScreen()),
+      // GoRoute(path: Routes.notice, name: Routes.notice, builder: (context, state) => NoticeListScreen()),
+    ],
+  );
+});

@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:imsomitiapp/core/base_widget/error_dialog.dart';
+import 'package:imsomitiapp/core/base_widget/loading_indicator.dart';
+import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_response_model.dart';
+import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
+
+
+class SignInStateListener extends ConsumerWidget {
+  const SignInStateListener({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<LoginResponse?>>(loginNotifierProvider, (previous, next) {
+      next.whenOrNull(
+        data: (user) {
+          if (user != null) {
+            LoadingOverlay.hide();
+            //LoadingIndicator.hide(context);
+            // Handle successful login, e.g., navigate to home screen
+            //   WidgetsBinding.instance.addPostFrameCallback((_) {
+            //   if (context.mounted) {
+            //       LoadingIndicator.hide(context);
+            //     context.goNamed(Routes.home);
+            //   }
+            // });
+          }
+        },
+        loading: () {
+          LoadingOverlay.show(context);
+         // LoadingIndicator.show(context);
+        },
+        error: (error, stackTrace) {
+          LoadingOverlay.hide();
+         // LoadingIndicator.hide(context);
+
+          // Handle error, e.g., show a snackbar with the error message
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              ErrorDialog.show(context, error.toString());
+            }
+          });
+        },
+      );
+    });
+    return const SizedBox.shrink();
+  }
+}
