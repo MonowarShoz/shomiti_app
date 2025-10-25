@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/auth/presentation/login_state_listener.dart';
+import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -145,10 +146,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Call your loginNotifierProvider here
-                        // ref.read(loginNotifierProvider.notifier).login(
-                        //   _usernameController.text,
-                        //   _passwordController.text,
-                        // );
+                        ref.read(loginNotifierProvider.notifier).login(
+                         username: _usernameController.text,
+                         password: _passwordController.text
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(

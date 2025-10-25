@@ -1,7 +1,7 @@
 import 'package:imsomitiapp/core/utils/app_strings.dart';
 
 class ApiConstants {
-  static const String baseUrl = "http://192.168.0.104:807/";
+  static const String baseUrl = "http://192.168.0.101:807";
   //static const String baseUrl = "http://rubims.lged.gov.bd";
   //static const String baseUrl = "http://test.ourhomework.xyz/NotePublish";
   //static const String baseUrl = "http://192.168.66.45/NotePublish";

@@ -50,10 +50,10 @@ dependencies:
   retrofit: ^4.6.0
   pretty_dio_logger: ^1.4.0
   flutter_image_compress: ^2.4.0
-  firebase_core: ^4.1.0
+  #firebase_core: ^4.1.0
   
-  firebase_messaging: ^16.0.1
-  flutter_local_notifications: ^19.4.2
+  #firebase_messaging: ^16.0.1
+  #flutter_local_notifications: ^19.4.2
   intl: ^0.20.2
   flutter_launcher_icons: ^0.14.4
 

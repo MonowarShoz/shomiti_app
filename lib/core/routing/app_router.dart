@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:imsomitiapp/core/routing/navigator_observer.dart';
 import 'package:imsomitiapp/core/routing/routes.dart';
+import 'package:imsomitiapp/features/Home/presentation/widget/home_screen.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
 import 'package:imsomitiapp/features/splash/presentation/splash_screen.dart';
@@ -58,7 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) {
        GoRoute(name: Routes.loginScreen, path: Routes.loginScreen, builder: (context, state) => LoginScreen()),
       // GoRoute(name: Routes.registerScreen, path: Routes.registerScreen, builder: (context, state) => SchoolRegisterScreen()),
       // GoRoute(name: Routes.changePass, path: Routes.changePass, builder: (context, state) => ChangePasswordScreen()),
-      // GoRoute(name: Routes.home, path: Routes.home, builder: (context, state) => HomeScreen()),
+       GoRoute(name: Routes.home, path: Routes.home, builder: (context, state) => HomeScreen()),
       // GoRoute(path: Routes.teachermapping, name: Routes.teachermapping, builder: (context, state) => TeacherMappingScreen()),
       // GoRoute(path: Routes.homework, name: Routes.homework, builder: (context, state) => HomeWorkScreen()),
       // GoRoute(path: Routes.allhomework, name: Routes.allhomework, builder: (context, state) => ViewAllHomeworkScreen()),

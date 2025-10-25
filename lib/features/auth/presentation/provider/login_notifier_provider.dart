@@ -22,10 +22,10 @@ class LoginNotifier extends AsyncNotifier<LoginResponse?> {
     return null;
   }
 
-  Future<void> login({required String phone, required String password, String? token}) async {
+  Future<void> login({required String username, required String password}) async {
     state = AsyncValue.loading();
 
-    final result = await _loginUseCase.call(username: phone, password: password, );
+    final result = await _loginUseCase.call(username: username, password: password, );
     result.when(
       success: (user) async {
         // ref.read(authStatusProvider.notifier).state = AuthStatus.authenticated;
