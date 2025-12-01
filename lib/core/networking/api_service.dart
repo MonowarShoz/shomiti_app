@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
+import 'package:imsomitiapp/features/Member_info/data/data_source/remote/model/member_info_save_model.dart';
 import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_request_model.dart';
 import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_response_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -70,6 +71,11 @@ abstract class ApiService {
   Future<List<MenuModel>> getUserMenu(
     @Header("Authorization") String token,
     @Query("roleName") String roleName,
+  );
+  @POST(ApiConstants.memberRegistration)
+  Future<String>memberRegistration(
+    @Header("Authorization") String token,
+    @Body() MemberInfoSaveBody memberInfoSaveBody
   );
 
   // @GET(ApiConstants.schoolLogoRoute)

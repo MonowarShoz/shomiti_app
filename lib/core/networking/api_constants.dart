@@ -11,45 +11,30 @@ class ApiConstants {
   //  static const String ssoUrl = "http://103.119.101.170:3002/";
 
   static const String login = "/api/Log/login";
-  static const String registrationRoute = "/api/RegiCtrl/sch-registration";
+  
   static const String menuRoute = "/api/Menu/childmenu";
-  static const String schoolLogoRoute = "/api/RegiCtrl/get-school-logo";
 
-  static const String saveClassRoute = "/api/EntityCtrl/save-class";
-  static const String saveShiftRoute = "/api/EntityCtrl/save-shift";
-  static const String saveSectionRoute = "/api/EntityCtrl/save-section";
-  static const String saveSubjectRoute = "/api/EntityCtrl/save-subject";
+  // Member Info
+  static const String memberRegistration = "/api/Memb/savemember";
+  static const String memberInfoEdit = "/api/Memb/editmember";
+  static const String memberInfoAll = "/api/Memb/memberinfoall";
 
-  static const String teacherRegistration =
-      "/api/RegiCtrl/teacher-registration";
-  static const String studentRegistration =
-      "/api/RegiCtrl/student-registration";
-  static const String getTeacherRoute = "/api/SelectedCtrl/get-teacher";
-  static const String getStudentRoute = "/api/SelectedCtrl/get-student";
-  static const String getSubject = "/api/EntityCtrl/get-subject";
-  static const String getSectionRoute = "/api/EntityCtrl/get-section";
-  static const String getShiftRoute = "/api/EntityCtrl/get-shift";
-  static const String getClassRoute = "/api/EntityCtrl/get-class";
-  static const String teacherMappingRoute = "/api/MapperCtrl/teacher-map";
-  static const String getSubjectByClass = "/api/EntityCtrl/get-subjectbyclass";
-  static const String getClassMap = "/api/MapperCtrl/get-class-map";
-  static const String getShiftMap = "/api/MapperCtrl/get-shift-map";
-  static const String getSectionMap = "/api/MapperCtrl/get-section-map";
-  static const String getSubjectMap = "/api/MapperCtrl/get-subject-map";
-  static const String getMap = "/api/MapperCtrl/get-map";
-  static const String saveHomeWork = "/api/HwCtrl/save-homework";
-  static const String homeworkMap = "/api/MapperCtrl/homework-map";
-  static const String getHomeworkMap = "/api/MapperCtrl/get-homeworkmap";
-  static const String getHomeWork = "/api/HwCtrl/get-homework";
-  static const String getAllHomeWork = "/api/HwCtrl/get-all-homework";
-  static const String editLogo = "/api/RegiCtrl/edit-logo";
 
-  static const String suggestclass = "/api/SuggestCtrl/get-sug-class";
-  static const String suggestSection = "/api/SuggestCtrl/get-sug-section";
-  static const String suggestShift = "/api/SuggestCtrl/get-sug-shift";
-  static const String suggestSubject = "/api/SuggestCtrl/get-sug-subject";
+  // Staff Info
+  static const String staffsave = "/api/StaffCtrl/save-staff";
+  static const String staffInfo = "/api/StaffCtrl/getstaffinfo";
+  static const String saveStaffDesignation = "/api/StaffCtrl/save-staff-designation";
 
-  static const String saveNotice = "/api/NoticeCtrl/save-notice";
+  //kisti
+  static const String kistiType = "/api/KistiCtrl/kistytype";
+  static const String kistiTypeById = "/api/KistiCtrl/kistytypebyid";
+  static const String kistireceivehistory = "/api/KistiCtrl/kistireceivehistory";
+  static const String kistiTypeByProject = "/api/KistiCtrl/kistytypebyproject";
+  static const String savekistiType = "/api/KistiCtrl/savekistitype";
+
+ 
+
+  
 }
 
 class ApiErrors {
