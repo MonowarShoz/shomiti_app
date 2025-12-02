@@ -6,6 +6,7 @@ import 'package:imsomitiapp/core/base/base_local_data_source.dart';
 import 'package:imsomitiapp/core/base/base_provider.dart';
 import 'package:imsomitiapp/core/networking/api_result.dart';
 import 'package:imsomitiapp/core/utils/app_strings.dart';
+import 'package:imsomitiapp/features/Home/presentation/provider/home_menu_notifier.dart';
 import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_response_model.dart';
 import 'package:imsomitiapp/features/auth/domain/entities/user.dart';
 import 'package:imsomitiapp/features/auth/domain/providers/login_use_case_provider.dart';
@@ -30,8 +31,8 @@ class LoginNotifier extends AsyncNotifier<LoginResponse?> {
       success: (user) async {
         // ref.read(authStatusProvider.notifier).state = AuthStatus.authenticated;
         await ref.read(newauthStatusProvider.notifier).setAuthenticated(user.token ?? '');
-        // ref.invalidate(homeMenuNotifierProvider);
-        // await ref.read(homeMenuNotifierProvider.future);
+        ref.invalidate(homeMenuNotifierProvider);
+        await ref.read(homeMenuNotifierProvider.future);
 
         state = AsyncValue.data(user);
       },

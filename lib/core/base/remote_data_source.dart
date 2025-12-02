@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imsomitiapp/core/networking/api_error_handler.dart';
 import 'package:imsomitiapp/core/networking/api_result.dart';
 import 'package:imsomitiapp/core/networking/api_service.dart';
+import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 
 
 class BaseRemoteDataSource {
@@ -23,6 +24,7 @@ class BaseRemoteDataSource {
     } catch (error)
     {
       if(error is DioException && error.response!.statusCode == 401){
+        await ref.read(newauthStatusProvider.notifier).seUntAuthenticated();
         // ref.read(authStatusProvider.notifier).state =
         //       AuthStatus.unauthenticated;
         //  ref.read(authProvider.notifier).state = false;

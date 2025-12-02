@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:imsomitiapp/core/helper/extensions.dart';
+import 'package:imsomitiapp/core/routing/routes.dart';
 import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
 import 'package:imsomitiapp/features/Home/presentation/provider/home_menu_notifier.dart';
@@ -226,6 +228,22 @@ class MenuGridItem extends StatelessWidget {
     return Icons.menu;
   }
 
+  void navigatingToModule(BuildContext context, String menuName) {
+    switch (menuName) {
+      case "Member Info":
+        context.pushNamed(Routes.memberRegistration);
+
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Under Construction ${menu.menuName}'),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+    }
+  }
+
   Color _getColorForIndex(int id) {
     final colors = [
       Colors.blue,
@@ -249,16 +267,17 @@ class MenuGridItem extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () {
+          navigatingToModule(context,menu.menuName ?? "");
           // Navigate to menu.menuUrl
           // Navigator.pushNamed(context, menu.menuUrl);
 
           // Or show a snackbar for demonstration
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Navigating to ${menu.menuName}'),
-              duration: const Duration(seconds: 1),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text('Navigating to ${menu.menuName}'),
+          //     duration: const Duration(seconds: 1),
+          //   ),
+          // );
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(
