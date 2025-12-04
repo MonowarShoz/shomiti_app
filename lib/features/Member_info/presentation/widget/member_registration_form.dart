@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imsomitiapp/core/base_widget/custom_image_picker.dart';
 import 'package:imsomitiapp/core/helper/image_helper.dart';
+import 'package:imsomitiapp/core/theming/text_styles.dart';
 
 class MemberRegistrationFormScreen extends ConsumerStatefulWidget {
   const MemberRegistrationFormScreen({super.key});
@@ -266,8 +267,109 @@ class _MemberRegistrationFormScreenState
                   ],
                   ),
                   _buildModerSection( 'Identity Documents', Icons.badge_rounded, [
+                     _buildModernTextField(
+                        controller: _nidController,
+                        label: 'National ID',
+                        hint: 'Enter NID number',
+                        icon: Icons.badge_outlined,
+                      ),
+                      _buildModernTextField(
+                        controller: _bicNoController,
+                        label: 'BIC Number',
+                        hint: 'Enter BIC number',
+                        icon: Icons.credit_card_rounded,
+                      ),
+                      _buildModernTextField(
+                        controller: _passportController,
+                        label: 'Passport Number',
+                        hint: 'Enter passport number',
+                        icon: Icons.flight_rounded,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 18),
+                        decoration: BoxDecoration(
+                           color: const Color(0xFFF8F9FA),
+                           borderRadius: BorderRadius.circular(16),
+                           border: Border.all(
+                            color: _identityDocFile  != null ?const Color(0xFF10B981) :  const Color(0xFFE2E8F0),
+                            width: 2,
+                           ),
+
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                               padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: _identityDocFile != null
+                                      ? const Color(0xFF10B981).withOpacity(0.1)
+                                      : const Color(0xFF6366F1).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(12),),
+                                  child: Icon( _identityDocFile != null ? Icons.check_circle : Icons.upload_file_rounded,
+                                  color: _identityDocFile != null 
+                                      ? const Color(0xFF10B981)
+                                      : const Color(0xFF6366F1),),
+                            ),
+                             const SizedBox(width: 16),
+                             Expanded(child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                      _identityDocFile != null ? 'Document Uploaded' : 'Upload Identity Document',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: _identityDocFile != null 
+                                            ? const Color(0xFF10B981)
+                                            : const Color(0xFF1A1A1A),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _identityDocFile != null ? 'Tap to change' : 'PDF, PNG, or JPG',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xFF94A3B8),
+                                      ),
+                                    ),
+
+                              ],
+                             )),
+                             Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 16,
+                                color: Colors.grey[400],
+                              ),
+
+                          ],
+                        ),
+                      )
                     
-                  ])
+                  ]),
+                  _buildModerSection('Family Member Information', Icons.family_restroom_rounded,[
+                     _buildModernTextField(
+                        controller: _fatherController,
+                        label: "Father's Name",
+                        hint: 'Enter father\'s name',
+                        icon: Icons.person_outline,
+                      ),
+                      _buildModernTextField(
+                        controller: _motherController,
+                        label: "Mother's Name",
+                        hint: 'Enter mother\'s name',
+                        icon: Icons.person_outline,
+                      ),
+                  ]),
+
+                  Container(
+                     margin: const EdgeInsets.all(20),
+                    child: ElevatedButton(
+                      onPressed: (){
+                    
+                      },
+                      child:  Text('Complete Registration',style: TextStyles.regularRoboto.copyWith(fontWeight: FontWeight.w600,fontSize: 16,color: Colors.white),),
+                    ),
+                  )
                   
                 ],
               ),
