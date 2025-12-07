@@ -50,13 +50,51 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<List<MenuModel>> getUserMenu(String token, String roleName) async {
+  Future<List<ParentMenuModel>> getParentUserMenu(
+    String token,
+    int compId,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'roleName': roleName};
+    final queryParameters = <String, dynamic>{r'compId': compId};
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<MenuModel>>(
+    final _options = _setStreamType<List<ParentMenuModel>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/Menu/parentmenu',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<ParentMenuModel> _value;
+    try {
+      _value = _result.data!
+          .map(
+            (dynamic i) => ParentMenuModel.fromJson(i as Map<String, dynamic>),
+          )
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<List<ChildMenuModel>> getChilUserMenu(
+    String token,
+    int parentId,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'parentid': parentId};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<List<ChildMenuModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -67,10 +105,12 @@ class _ApiService implements ApiService {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<MenuModel> _value;
+    late List<ChildMenuModel> _value;
     try {
       _value = _result.data!
-          .map((dynamic i) => MenuModel.fromJson(i as Map<String, dynamic>))
+          .map(
+            (dynamic i) => ChildMenuModel.fromJson(i as Map<String, dynamic>),
+          )
           .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

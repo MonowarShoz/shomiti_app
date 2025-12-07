@@ -4,6 +4,7 @@ import 'package:imsomitiapp/core/helper/extensions.dart';
 import 'package:imsomitiapp/core/routing/routes.dart';
 import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
+import 'package:imsomitiapp/features/Home/data/datasource/remote/model/parent_menu_model.dart';
 import 'package:imsomitiapp/features/Home/presentation/provider/home_menu_notifier.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/settings/presentation/provider/setting_notifier.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeMenuState = ref.watch(homeMenuNotifierProvider);
+    final homeMenuState = ref.watch(homeparentMenuNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -142,7 +143,7 @@ class HomeScreen extends ConsumerWidget {
               Text('Error: ${error.toString()}'),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(homeMenuNotifierProvider),
+                onPressed: () => ref.refresh(homeparentMenuNotifierProvider),
                 child: const Text('Retry'),
               ),
             ],
@@ -158,7 +159,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final menuAsyncValue = ref.watch(homeMenuNotifierProvider);
+    final menuAsyncValue = ref.watch(homeparentMenuNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -199,7 +200,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
               Text('Error: ${error.toString()}'),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(homeMenuNotifierProvider),
+                onPressed: () => ref.refresh(homeparentMenuNotifierProvider),
                 child: const Text('Retry'),
               ),
             ],
@@ -211,7 +212,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
 }
 
 class MenuGridItem extends StatelessWidget {
-  final MenuModel menu;
+  final ParentMenuModel menu;
 
   const MenuGridItem({super.key, required this.menu});
 
@@ -322,27 +323,7 @@ class MenuGridItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (menu.level! > 0) ...[
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'L${menu.level}',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: color,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
+            
             ],
           ),
         ),

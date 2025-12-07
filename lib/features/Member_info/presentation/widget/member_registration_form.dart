@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:imsomitiapp/core/base_widget/custom_file_picker.dart';
 import 'package:imsomitiapp/core/base_widget/custom_image_picker.dart';
 import 'package:imsomitiapp/core/helper/image_helper.dart';
 import 'package:imsomitiapp/core/theming/text_styles.dart';
@@ -36,6 +37,7 @@ class _MemberRegistrationFormScreenState
   File? _photoFile;
   File? _identityDocFile;
   String? _photoBase64;
+  String? _docuFileString;
 
   @override
   Widget build(BuildContext context) {
@@ -285,63 +287,66 @@ class _MemberRegistrationFormScreenState
                         hint: 'Enter passport number',
                         icon: Icons.flight_rounded,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 18),
-                        decoration: BoxDecoration(
-                           color: const Color(0xFFF8F9FA),
-                           borderRadius: BorderRadius.circular(16),
-                           border: Border.all(
-                            color: _identityDocFile  != null ?const Color(0xFF10B981) :  const Color(0xFFE2E8F0),
-                            width: 2,
-                           ),
-
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                               padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: _identityDocFile != null
-                                      ? const Color(0xFF10B981).withOpacity(0.1)
-                                      : const Color(0xFF6366F1).withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12),),
-                                  child: Icon( _identityDocFile != null ? Icons.check_circle : Icons.upload_file_rounded,
-                                  color: _identityDocFile != null 
-                                      ? const Color(0xFF10B981)
-                                      : const Color(0xFF6366F1),),
-                            ),
-                             const SizedBox(width: 16),
-                             Expanded(child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                      _identityDocFile != null ? 'Document Uploaded' : 'Upload Identity Document',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        color: _identityDocFile != null 
-                                            ? const Color(0xFF10B981)
-                                            : const Color(0xFF1A1A1A),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      _identityDocFile != null ? 'Tap to change' : 'PDF, PNG, or JPG',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Color(0xFF94A3B8),
-                                      ),
-                                    ),
-
-                              ],
-                             )),
-                             Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 16,
-                                color: Colors.grey[400],
+                      GestureDetector(
+                        onTap: _pickIdentyDocFile,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          decoration: BoxDecoration(
+                             color: const Color(0xFFF8F9FA),
+                             borderRadius: BorderRadius.circular(16),
+                             border: Border.all(
+                              color: _docuFileString  != null ?const Color(0xFF10B981) :  const Color(0xFFE2E8F0),
+                              width: 2,
+                             ),
+                        
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                 padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: _docuFileString != null
+                                        ? const Color(0xFF10B981).withOpacity(0.1)
+                                        : const Color(0xFF6366F1).withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),),
+                                    child: Icon( _docuFileString != null ? Icons.check_circle : Icons.upload_file_rounded,
+                                    color: _docuFileString != null 
+                                        ? const Color(0xFF10B981)
+                                        : const Color(0xFF6366F1),),
                               ),
-
-                          ],
+                               const SizedBox(width: 16),
+                               Expanded(child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                        _docuFileString != null ? 'Document Uploaded' : 'Upload Identity Document',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: _docuFileString != null 
+                                              ? const Color(0xFF10B981)
+                                              : const Color(0xFF1A1A1A),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        _docuFileString != null ? 'Tap to change' : 'PDF, PNG, or JPG',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Color(0xFF94A3B8),
+                                        ),
+                                      ),
+                        
+                                ],
+                               )),
+                               Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 16,
+                                  color: Colors.grey[400],
+                                ),
+                        
+                            ],
+                          ),
                         ),
                       )
                     
@@ -385,6 +390,14 @@ class _MemberRegistrationFormScreenState
     if (imageData != null) {
       setState(() {
         _photoBase64 = imageData;
+      });
+    }
+  }
+   _pickIdentyDocFile() async {
+    final fileData = await FilePickerHelper.pickDocumentBase64();
+    if (fileData != null) {
+      setState(() {
+        _docuFileString = fileData;
       });
     }
   }

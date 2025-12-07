@@ -14,11 +14,11 @@ import 'package:imsomitiapp/features/auth/domain/usecase/login_use_case.dart';
 
 import 'package:imsomitiapp/features/settings/presentation/provider/setting_notifier.dart';
 
-class LoginNotifier extends AsyncNotifier<LoginResponse?> {
+class LoginNotifier extends AsyncNotifier<LoginResponseModel?> {
   late final LoginUseCase _loginUseCase;
 
   @override
-  FutureOr<LoginResponse?> build() async {
+  FutureOr<LoginResponseModel?> build() async {
     _loginUseCase = await ref.read(loginUseCaseProvider.future);
     return null;
   }
@@ -31,8 +31,8 @@ class LoginNotifier extends AsyncNotifier<LoginResponse?> {
       success: (user) async {
         // ref.read(authStatusProvider.notifier).state = AuthStatus.authenticated;
         await ref.read(newauthStatusProvider.notifier).setAuthenticated(user.token ?? '');
-        ref.invalidate(homeMenuNotifierProvider);
-        await ref.read(homeMenuNotifierProvider.future);
+        ref.invalidate(homeparentMenuNotifierProvider);
+        await ref.read(homeparentMenuNotifierProvider.future);
 
         state = AsyncValue.data(user);
       },
@@ -44,7 +44,7 @@ class LoginNotifier extends AsyncNotifier<LoginResponse?> {
   }
 }
 
-final loginNotifierProvider = AsyncNotifierProvider<LoginNotifier, LoginResponse?>(() {
+final loginNotifierProvider = AsyncNotifierProvider<LoginNotifier, LoginResponseModel?>(() {
   return LoginNotifier();
 });
 

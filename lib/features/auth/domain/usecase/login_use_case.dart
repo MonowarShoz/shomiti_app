@@ -9,7 +9,7 @@ final LoginRepository loginRepository ;
 LoginUseCase(this.loginRepository);
 
 
-Future<ApiResult<LoginResponse>> call({required String username ,required String password, }) async{
+Future<ApiResult<LoginResponseModel>> call({required String username ,required String password, }) async{
   return await loginRepository.login(phone: username,password: password, );
 }
 

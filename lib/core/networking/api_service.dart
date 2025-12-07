@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:imsomitiapp/features/Home/data/datasource/remote/model/child_menu_model.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
+import 'package:imsomitiapp/features/Home/data/datasource/remote/model/parent_menu_model.dart';
 import 'package:imsomitiapp/features/Member_info/data/data_source/remote/model/member_info_save_model.dart';
 import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_request_model.dart';
 import 'package:imsomitiapp/features/auth/data/data_source/remote/model/login_response_model.dart';
@@ -65,12 +67,16 @@ abstract class ApiService {
   //   @Header("Authorization") String token,
   //   @Body() HomeworkMapModel saveHomeWorkBody,
   // );
-
-
-  @GET(ApiConstants.menuRoute)
-  Future<List<MenuModel>> getUserMenu(
+  @GET(ApiConstants.parentmenuRoute)
+  Future<List<ParentMenuModel>> getParentUserMenu(
     @Header("Authorization") String token,
-    @Query("roleName") String roleName,
+    @Query("compId") int compId,
+  );
+
+  @GET(ApiConstants.childmenuRoute)
+  Future<List<ChildMenuModel>> getChilUserMenu(
+    @Header("Authorization") String token,
+    @Query("parentid") int parentId,
   );
   @POST(ApiConstants.memberRegistration)
   Future<String>memberRegistration(

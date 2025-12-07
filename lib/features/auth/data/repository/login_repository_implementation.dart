@@ -15,14 +15,14 @@ class LoginRepositoryImplementation implements LoginRepository {
   final LoginRemoteDataSource _loginRemoteDataSource;
   LoginRepositoryImplementation(this._loginLocalDataSource, this._loginRemoteDataSource);
   @override
-  Future<ApiResult<LoginResponse>> login({required String phone, required String password, String? deviceToken}) async {
+  Future<ApiResult<LoginResponseModel>> login({required String phone, required String password, String? deviceToken}) async {
     try {
       final result = await _loginRemoteDataSource.login(username: phone, password: password,);
 
       return result.when(
         success: (loginResponseData) async {
           if (loginResponseData != null) {
-            final user = loginResponseData.data;
+            final user = loginResponseData;
             final userData = jsonEncode(user);
             await _loginLocalDataSource.cacheUserInfo(userData);
             await _loginLocalDataSource.cacheUserToken(user!.token!);

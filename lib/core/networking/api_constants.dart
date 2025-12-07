@@ -12,7 +12,8 @@ class ApiConstants {
 
   static const String login = "/api/Log/login";
   
-  static const String menuRoute = "/api/Menu/childmenu";
+  static const String parentmenuRoute = "/api/Menu/parentmenu";
+  static const String childmenuRoute = "/api/Menu/childmenu";
 
   // Member Info
   static const String memberRegistration = "/api/Memb/savemember";

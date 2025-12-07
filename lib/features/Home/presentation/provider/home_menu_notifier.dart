@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imsomitiapp/core/networking/api_result.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
+import 'package:imsomitiapp/features/Home/data/datasource/remote/model/parent_menu_model.dart';
 import 'package:imsomitiapp/features/Home/domain/Provider/home_usecase_provider.dart';
 
-class HomeMenuNotifier extends AsyncNotifier<List<MenuModel>> {
+class HomeParentMenuNotifier extends AsyncNotifier<List<ParentMenuModel>> {
   @override
-  FutureOr<List<MenuModel>> build() async {
+  FutureOr<List<ParentMenuModel>> build() async {
     ref.keepAlive();
-    final homeMenuUsecase = await ref.read(homeMenuUsecaseProvider.future);
+    final homeMenuUsecase = await ref.read(parentMenuUsecaseProvider.future);
     final result = await homeMenuUsecase.call();
     return result.when(
       success: (data) {
@@ -37,9 +38,9 @@ class HomeMenuNotifier extends AsyncNotifier<List<MenuModel>> {
   }
 }
 
-final homeMenuNotifierProvider =
-    AsyncNotifierProvider<HomeMenuNotifier, List<MenuModel>>(
-      () => HomeMenuNotifier(),
+final homeparentMenuNotifierProvider =
+    AsyncNotifierProvider<HomeParentMenuNotifier, List<ParentMenuModel>>(
+      () => HomeParentMenuNotifier(),
     );
 
 //     final optionAvailableProvider = FutureProvider<bool>((ref) async {

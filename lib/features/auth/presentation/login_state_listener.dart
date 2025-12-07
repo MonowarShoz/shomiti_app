@@ -11,7 +11,7 @@ class SignInStateListener extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<LoginResponse?>>(loginNotifierProvider, (previous, next) {
+    ref.listen<AsyncValue<LoginResponseModel?>>(loginNotifierProvider, (previous, next) {
       next.whenOrNull(
         data: (user) {
           if (user != null) {

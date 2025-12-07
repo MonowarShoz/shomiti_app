@@ -1,58 +1,47 @@
 import 'dart:convert';
 
+import 'dart:convert';
+
 LoginResponseModel loginResponseModelFromJson(String str) => LoginResponseModel.fromJson(json.decode(str));
 
 String loginResponseModelToJson(LoginResponseModel data) => json.encode(data.toJson());
 
 class LoginResponseModel {
-    LoginResponse? data;
+    String? token;
+    String? role;
+    String? fullname;
+    String? username;
+    String? cname;
+    int? cid;
+    String? message;
 
     LoginResponseModel({
-        this.data,
+        this.token,
+        this.role,
+        this.fullname,
+        this.username,
+        this.cname,
+        this.cid,
+        this.message,
     });
 
     factory LoginResponseModel.fromJson(Map<String, dynamic> json) => LoginResponseModel(
-        data: json["token"] == null ? null : LoginResponse.fromJson(json["token"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "token": data?.toJson(),
-    };
-}
-
-class LoginResponse {
-    String? token;
-    String? username;
-    String? fullname;
-    String? role;
-    String? cName;
-    int? cId;
-
-    LoginResponse({
-        this.token,
-        this.username,
-        this.fullname,
-        this.role,
-        this.cName,
-        this.cId,
-    });
-
-    factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
         token: json["token"],
-        username: json["username"],
-        fullname: json["fullname"],
         role: json["role"],
-        cName: json["cName"],
-        cId: json["cId"],
+        fullname: json["fullname"],
+        username: json["username"],
+        cname: json["cname"],
+        cid: json["cid"],
+        message: json["message"],
     );
 
     Map<String, dynamic> toJson() => {
         "token": token,
-        "username": username,
-        "fullname": fullname,
         "role": role,
-        "cName": cName,
-        "cId": cId,
+        "fullname": fullname,
+        "username": username,
+        "cname": cname,
+        "cid": cid,
+        "message": message,
     };
 }
-
