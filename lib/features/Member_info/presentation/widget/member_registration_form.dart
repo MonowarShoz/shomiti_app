@@ -43,344 +43,400 @@ class _MemberRegistrationFormScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar.large(
-            expandedHeight: 80,
-            floating: false,
-            pinned: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                "Memeber Registration",
-                style: TextStyle(
-                  color: Color(0xFF1A1A1A),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar.large(
+              expandedHeight: 80,
+              floating: false,
+              pinned: true,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+        
+              flexibleSpace: FlexibleSpaceBar(
+                title: DefaultTextStyle.merge(
+                  style: const TextStyle(
+                    fontSize: 16, // fix large default font
+                    color: Color(0xFF1A1A1A),
+                    fontWeight: FontWeight.w600,
+                  ),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: const Icon(
+                          Icons.arrow_back_ios_rounded,
+                          color: Colors.black,
+                          size: 20,
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    const Color(0xFF6366F1),
-                                    const Color(0xFF8B5CF6),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Memeber Registration",
+                        style: TextStyle(
+                          color: Color(0xFF1A1A1A),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+        
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      const Color(0xFF6366F1),
+                                      const Color(0xFF8B5CF6),
+                                    ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(
+                                        0xFF6366F1,
+                                      ).withOpacity(0.3),
+                                      blurRadius: 20,
+                                      offset: const Offset(0, 8),
+                                    ),
                                   ],
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(
-                                      0xFF6366F1,
-                                    ).withOpacity(0.3),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
+                                child: CircleAvatar(
+                                  radius: 60,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: _photoBase64 != null
+                                      ? MemoryImage(
+                                          dataFromBase64String(_photoBase64!),
+                                        )
+                                      : null,
+                                  child: _photoFile == null
+                                      ? const Icon(
+                                          Icons.person,
+                                          size: 50,
+                                          color: Colors.white,
+                                        )
+                                      : null,
+                                ),
                               ),
-                              child: CircleAvatar(
-                                radius: 60,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: _photoBase64 != null
-                                    ? MemoryImage(
-                                        dataFromBase64String(_photoBase64!),
-                                      )
-                                    : null,
-                                child: _photoFile == null
-                                    ? const Icon(
-                                        Icons.person,
-                                        size: 50,
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: GestureDetector(
+                                  onTap: _pickPhoto,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color(0xFF6366F1),
+                                          Color(0xFF8B5CF6),
+                                        ],
+                                      ),
+                                      border: Border.all(
                                         color: Colors.white,
-                                      )
-                                    : null,
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: _pickPhoto,
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xFF6366F1),
-                                        Color(0xFF8B5CF6),
-                                      ],
+                                        width: 3,
+                                      ),
                                     ),
-                                    border: Border.all(
+                                    child: const Icon(
+                                      Icons.camera_alt,
                                       color: Colors.white,
-                                      width: 3,
+                                      size: 18,
                                     ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                    size: 18,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Upload Profile Photo',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF64748B),
-                            fontWeight: FontWeight.w500,
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildModerSection(
-                    'Personal Information',
-                    Icons.person_pin_rounded,
-                    [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildModernTextField(
-                              controller: _givenNameController,
-                              label: 'Given Name',
-                              hint: 'Enter first name',
-                              icon: Icons.person_outline,
-                              validator: (v) =>
-                                  v?.isEmpty ?? true ? 'Required' : null,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildModernTextField(
-                              controller: _sureNameController,
-                              label: 'Surname',
-                              hint: 'Enter last name',
-                              icon: Icons.person,
-                              validator: (v) =>
-                                  v?.isEmpty ?? true ? 'Required' : null,
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Upload Profile Photo',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF64748B),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Gender',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF64748B),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
+                    ),
+                    _buildModerSection(
+                      'Personal Information',
+                      Icons.person_pin_rounded,
+                      [
                         Row(
                           children: [
                             Expanded(
-                              child: _buildGenderCard(1, 'Male', Icons.male),
+                              child: _buildModernTextField(
+                                controller: _givenNameController,
+                                label: 'Given Name',
+                                hint: 'Enter first name',
+                                icon: Icons.person_outline,
+                                validator: (v) =>
+                                    v?.isEmpty ?? true ? 'Required' : null,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
-                              child: _buildGenderCard(2, 'Female', Icons.female),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildGenderCard(
-                                3,
-                                'Other',
-                                Icons.transgender,
+                              child: _buildModernTextField(
+                                controller: _sureNameController,
+                                label: 'Surname',
+                                hint: 'Enter last name',
+                                icon: Icons.person,
+                                validator: (v) =>
+                                    v?.isEmpty ?? true ? 'Required' : null,
                               ),
                             ),
                           ],
                         ),
-                        _buildModernTextField(controller: _nationalityController,
-                          label: 'Nationality',
-                          hint: 'Enter nationality',
-                          icon: Icons.flag_rounded,),
                       ],
                     ),
-                    
-                  ),
-                  _buildModerSection('Contact Information', Icons.contact_phone_rounded, [
-                     _buildModernTextField(
-                        controller: _phoneController,
-                        label: 'Phone Number',
-                        hint: '+880 XXX XXX XXXX',
-                        icon: Icons.phone_android_rounded,
-                        keyboardType: TextInputType.phone,
-                        validator: (v) => v?.isEmpty ?? true ? 'Required' : null,
-                      ),
-                      _buildModernTextField(
-                        controller: _emailController,
-                        label: 'Email Address',
-                        hint: 'your@email.com',
-                        icon: Icons.email_rounded,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (v) {
-                          if (v?.isEmpty ?? true) return 'Required';
-                          if (!v!.contains('@')) return 'Invalid email';
-                          return null;
-                        },
-                      ),
-                      _buildModernTextField(
-                        controller: _addressController,
-                        label: 'Address',
-                        hint: 'Enter full address',
-                        icon: Icons.home_rounded,
-                        maxLines: 3,
-                      ),
-                  ],
-                  ),
-                  _buildModerSection( 'Identity Documents', Icons.badge_rounded, [
-                     _buildModernTextField(
-                        controller: _nidController,
-                        label: 'National ID',
-                        hint: 'Enter NID number',
-                        icon: Icons.badge_outlined,
-                      ),
-                      _buildModernTextField(
-                        controller: _bicNoController,
-                        label: 'BIC Number',
-                        hint: 'Enter BIC number',
-                        icon: Icons.credit_card_rounded,
-                      ),
-                      _buildModernTextField(
-                        controller: _passportController,
-                        label: 'Passport Number',
-                        hint: 'Enter passport number',
-                        icon: Icons.flight_rounded,
-                      ),
-                      GestureDetector(
-                        onTap: _pickIdentyDocFile,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 18),
-                          decoration: BoxDecoration(
-                             color: const Color(0xFFF8F9FA),
-                             borderRadius: BorderRadius.circular(16),
-                             border: Border.all(
-                              color: _docuFileString  != null ?const Color(0xFF10B981) :  const Color(0xFFE2E8F0),
-                              width: 2,
-                             ),
-                        
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Gender',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF64748B),
+                            ),
                           ),
-                          child: Row(
+                          const SizedBox(height: 12),
+                          Row(
                             children: [
-                              Container(
-                                 padding: const EdgeInsets.all(12),
+                              Expanded(
+                                child: _buildGenderCard(1, 'Male', Icons.male),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildGenderCard(
+                                  2,
+                                  'Female',
+                                  Icons.female,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildGenderCard(
+                                  3,
+                                  'Other',
+                                  Icons.transgender,
+                                ),
+                              ),
+                            ],
+                          ),
+                          _buildModernTextField(
+                            controller: _nationalityController,
+                            label: 'Nationality',
+                            hint: 'Enter nationality',
+                            icon: Icons.flag_rounded,
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildModerSection(
+                      'Contact Information',
+                      Icons.contact_phone_rounded,
+                      [
+                        _buildModernTextField(
+                          controller: _phoneController,
+                          label: 'Phone Number',
+                          hint: '+880 XXX XXX XXXX',
+                          icon: Icons.phone_android_rounded,
+                          keyboardType: TextInputType.phone,
+                          validator: (v) =>
+                              v?.isEmpty ?? true ? 'Required' : null,
+                        ),
+                        _buildModernTextField(
+                          controller: _emailController,
+                          label: 'Email Address',
+                          hint: 'your@email.com',
+                          icon: Icons.email_rounded,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (v) {
+                            if (v?.isEmpty ?? true) return 'Required';
+                            if (!v!.contains('@')) return 'Invalid email';
+                            return null;
+                          },
+                        ),
+                        _buildModernTextField(
+                          controller: _addressController,
+                          label: 'Address',
+                          hint: 'Enter full address',
+                          icon: Icons.home_rounded,
+                          maxLines: 3,
+                        ),
+                      ],
+                    ),
+                    _buildModerSection(
+                      'Identity Documents',
+                      Icons.badge_rounded,
+                      [
+                        _buildModernTextField(
+                          controller: _nidController,
+                          label: 'National ID',
+                          hint: 'Enter NID number',
+                          icon: Icons.badge_outlined,
+                        ),
+                        _buildModernTextField(
+                          controller: _bicNoController,
+                          label: 'BIC Number',
+                          hint: 'Enter BIC number',
+                          icon: Icons.credit_card_rounded,
+                        ),
+                        _buildModernTextField(
+                          controller: _passportController,
+                          label: 'Passport Number',
+                          hint: 'Enter passport number',
+                          icon: Icons.flight_rounded,
+                        ),
+                        GestureDetector(
+                          onTap: _pickIdentyDocFile,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 18),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8F9FA),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: _docuFileString != null
+                                    ? const Color(0xFF10B981)
+                                    : const Color(0xFFE2E8F0),
+                                width: 2,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
                                     color: _docuFileString != null
                                         ? const Color(0xFF10B981).withOpacity(0.1)
-                                        : const Color(0xFF6366F1).withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(12),),
-                                    child: Icon( _docuFileString != null ? Icons.check_circle : Icons.upload_file_rounded,
-                                    color: _docuFileString != null 
+                                        : const Color(
+                                            0xFF6366F1,
+                                          ).withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    _docuFileString != null
+                                        ? Icons.check_circle
+                                        : Icons.upload_file_rounded,
+                                    color: _docuFileString != null
                                         ? const Color(0xFF10B981)
-                                        : const Color(0xFF6366F1),),
-                              ),
-                               const SizedBox(width: 16),
-                               Expanded(child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                        _docuFileString != null ? 'Document Uploaded' : 'Upload Identity Document',
+                                        : const Color(0xFF6366F1),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _docuFileString != null
+                                            ? 'Document Uploaded'
+                                            : 'Upload Identity Document',
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
-                                          color: _docuFileString != null 
+                                          color: _docuFileString != null
                                               ? const Color(0xFF10B981)
                                               : const Color(0xFF1A1A1A),
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        _docuFileString != null ? 'Tap to change' : 'PDF, PNG, or JPG',
+                                        _docuFileString != null
+                                            ? 'Tap to change'
+                                            : 'PDF, PNG, or JPG',
                                         style: const TextStyle(
                                           fontSize: 13,
                                           color: Color(0xFF94A3B8),
                                         ),
                                       ),
-                        
-                                ],
-                               )),
-                               Icon(
+                                    ],
+                                  ),
+                                ),
+                                Icon(
                                   Icons.arrow_forward_ios_rounded,
                                   size: 16,
                                   color: Colors.grey[400],
                                 ),
-                        
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      )
-                    
-                  ]),
-                  _buildModerSection('Family Member Information', Icons.family_restroom_rounded,[
-                     _buildModernTextField(
-                        controller: _fatherController,
-                        label: "Father's Name",
-                        hint: 'Enter father\'s name',
-                        icon: Icons.person_outline,
-                      ),
-                      _buildModernTextField(
-                        controller: _motherController,
-                        label: "Mother's Name",
-                        hint: 'Enter mother\'s name',
-                        icon: Icons.person_outline,
-                      ),
-                  ]),
-
-                  Container(
-                     margin: const EdgeInsets.all(20),
-                    child: ElevatedButton(
-                      onPressed: (){
-                    
-                      },
-                      child:  Text('Complete Registration',style: TextStyles.regularRoboto.copyWith(fontWeight: FontWeight.w600,fontSize: 16,color: Colors.white),),
+                      ],
                     ),
-                  )
-                  
-                ],
+                    _buildModerSection(
+                      'Family Member Information',
+                      Icons.family_restroom_rounded,
+                      [
+                        _buildModernTextField(
+                          controller: _fatherController,
+                          label: "Father's Name",
+                          hint: 'Enter father\'s name',
+                          icon: Icons.person_outline,
+                        ),
+                        _buildModernTextField(
+                          controller: _motherController,
+                          label: "Mother's Name",
+                          hint: 'Enter mother\'s name',
+                          icon: Icons.person_outline,
+                        ),
+                      ],
+                    ),
+        
+                    Container(
+                      margin: const EdgeInsets.all(20),
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Complete Registration',
+                          style: TextStyles.regularRoboto.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -393,7 +449,8 @@ class _MemberRegistrationFormScreenState
       });
     }
   }
-   _pickIdentyDocFile() async {
+
+  _pickIdentyDocFile() async {
     final fileData = await FilePickerHelper.pickDocumentBase64();
     if (fileData != null) {
       setState(() {
@@ -408,7 +465,7 @@ class _MemberRegistrationFormScreenState
     List<Widget> children,
   ) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       decoration: BoxDecoration(
         color: Colors.white,

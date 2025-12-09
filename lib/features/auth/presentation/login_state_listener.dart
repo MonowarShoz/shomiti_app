@@ -27,7 +27,10 @@ class SignInStateListener extends ConsumerWidget {
           }
         },
         loading: () {
-          LoadingOverlay.show(context);
+          if(context.mounted){
+            LoadingOverlay.show(context);
+          }
+          
          // LoadingIndicator.show(context);
         },
         error: (error, stackTrace) {

@@ -6,6 +6,7 @@ import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/parent_menu_model.dart';
 import 'package:imsomitiapp/features/Home/presentation/provider/home_menu_notifier.dart';
+import 'package:imsomitiapp/features/Home/presentation/provider/home_sub_menu_notifier.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/settings/presentation/provider/setting_notifier.dart';
 
@@ -128,7 +129,7 @@ class HomeScreen extends ConsumerWidget {
               itemCount: menus.length,
               itemBuilder: (context, index) {
                 final menu = menus[index];
-                return MenuGridItem(menu: menu);
+                return MenuGridItem(menu: menu,ref: ref,);
               },
             ),
           );
@@ -185,7 +186,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
               itemCount: menus.length,
               itemBuilder: (context, index) {
                 final menu = menus[index];
-                return MenuGridItem(menu: menu);
+                return MenuGridItem(menu: menu,ref: ref,);
               },
             ),
           );
@@ -213,8 +214,9 @@ class HomeMenuGridScreen extends ConsumerWidget {
 
 class MenuGridItem extends StatelessWidget {
   final ParentMenuModel menu;
+  final WidgetRef ref;
 
-  const MenuGridItem({super.key, required this.menu});
+  const MenuGridItem({super.key, required this.menu,required this.ref});
 
   IconData _getIconForMenu(String menuName) {
     final name = menuName.toLowerCase();
@@ -227,22 +229,6 @@ class MenuGridItem extends StatelessWidget {
     if (name.contains('order')) return Icons.shopping_cart;
     if (name.contains('payment')) return Icons.payment;
     return Icons.menu;
-  }
-
-  void navigatingToModule(BuildContext context, String menuName) {
-    switch (menuName) {
-      case "Member Info":
-        context.pushNamed(Routes.memberRegistration);
-
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Under Construction ${menu.menuName}'),
-            duration: const Duration(seconds: 1),
-          ),
-        );
-    }
   }
 
   Color _getColorForIndex(int id) {
@@ -258,6 +244,25 @@ class MenuGridItem extends StatelessWidget {
     ];
     return colors[id % colors.length];
   }
+  //  void navigatingToModule(BuildContext context, String menuName) {
+  //   context.pushNamed(Routes.allhomework,extra: {
+  //     'menuName':
+
+  //   });
+  //   // switch (menuName) {
+  //   //   case "Member Info":
+  //   //     context.pushNamed(Routes.memberRegistration);
+
+  //   //     break;
+  //   //   default:
+  //   //     ScaffoldMessenger.of(context).showSnackBar(
+  //   //       SnackBar(
+  //   //         content: Text('Under Construction ${menu.menuName}'),
+  //   //         duration: const Duration(seconds: 1),
+  //   //       ),
+  //   //     );
+  //   // }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -267,8 +272,20 @@ class MenuGridItem extends StatelessWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () {
-          navigatingToModule(context,menu.menuName ?? "");
+        onTap: () async{
+         await ref.read(subMenuNotifierProvider.notifier).loadSubMenu(menu.id!);
+         if(context.mounted){
+          context.pushNamed(
+            Routes.subMenu,
+            extra: {
+              'menuName': menu.menuName,
+              'icon': _getIconForMenu(menu.menuName!),
+              'color': color,
+            },
+          );
+         }
+          
+          // navigatingToModule(context,menu.menuName ?? "");
           // Navigate to menu.menuUrl
           // Navigator.pushNamed(context, menu.menuUrl);
 
@@ -323,7 +340,6 @@ class MenuGridItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-            
             ],
           ),
         ),
