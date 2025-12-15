@@ -7,6 +7,7 @@ import 'package:imsomitiapp/core/base_widget/custom_file_picker.dart';
 import 'package:imsomitiapp/core/base_widget/custom_image_picker.dart';
 import 'package:imsomitiapp/core/helper/image_helper.dart';
 import 'package:imsomitiapp/core/theming/text_styles.dart';
+import 'package:imsomitiapp/features/Member_info/presentation/provider/member_registration_notifier.dart';
 
 class MemberRegistrationFormScreen extends ConsumerStatefulWidget {
   const MemberRegistrationFormScreen({super.key});
@@ -41,6 +42,7 @@ class _MemberRegistrationFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final memberRegistrationState = ref.watch(memberRegistraionNotifierProvider);
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(

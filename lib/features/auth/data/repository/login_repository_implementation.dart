@@ -29,7 +29,7 @@ class LoginRepositoryImplementation implements LoginRepository {
 
             return ApiResult.success(user);
           } else {
-            return ApiResult.failure(ApiErrorHandler.handle(ApiErrors.noContent));
+            return ApiResult.failure(ApiErrorHandler.handle(DataSource.noContent.getFailure()));
           }
         },
         failure: (errorHandler) {

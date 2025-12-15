@@ -2,17 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:imsomitiapp/core/networking/api_constants.dart';
 import 'package:imsomitiapp/core/networking/api_error_model.dart';
 
-class ApiErrorHandler {
-  late ApiErrorModel apiErrorModel;
-  ApiErrorHandler.handle(dynamic error) {
-    if (error is DioException) {
-      apiErrorModel = _handleError(error);
-    } else if (error is String) {
-      apiErrorModel = _handleStringError(error);
-    } else {
-      apiErrorModel = DataSource.defaultError.getFailure();
+class ApiErrorHandler implements Exception {
+  final ApiErrorModel apiErrorModel;
+   ApiErrorHandler.handle(dynamic error) : apiErrorModel = _resolveError(error);
+
+  static ApiErrorModel _resolveError(dynamic error){
+    if(error is DioException){
+      return _handleError(error);
+    }else if(error is String){
+      return _handleStringError(error);
+    }else {
+      return DataSource.defaultError.getFailure();
     }
-  }
+  } 
+
   static ApiErrorModel _handleStringError(String error) {
     if(error == "unauthorized"){
        return ApiErrorModel(code: 401, message: error);

@@ -16,26 +16,20 @@ class SignInStateListener extends ConsumerWidget {
         data: (user) {
           if (user != null) {
             LoadingOverlay.hide();
-            //LoadingIndicator.hide(context);
-            // Handle successful login, e.g., navigate to home screen
-            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-            //   if (context.mounted) {
-            //       LoadingIndicator.hide(context);
-            //     context.goNamed(Routes.home);
-            //   }
-            // });
+            
           }
         },
         loading: () {
+          
           if(context.mounted){
             LoadingOverlay.show(context);
           }
           
-         // LoadingIndicator.show(context);
+       
         },
         error: (error, stackTrace) {
           LoadingOverlay.hide();
-         // LoadingIndicator.hide(context);
+         
 
           // Handle error, e.g., show a snackbar with the error message
           WidgetsBinding.instance.addPostFrameCallback((_) {
