@@ -20,13 +20,13 @@ class MemberRegistrationUsecase {
     String? address,
     String? idenDocu,
     String? photo,
-    required int compId,
+
   }) async {
     return await repository.memberRegistration(
       givenName: givenName,
     
       phone: phone,
-      compId: compId,
+
       sureName: sureName,
       email: email,
       niD: niD,

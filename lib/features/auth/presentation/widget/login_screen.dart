@@ -26,11 +26,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loginState = ref.watch(loginNotifierProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          const SignInStateListener(),
+          //const SignInStateListener(),
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -53,11 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const Text(
                         'Somiti App',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E88E5),
-                        ),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF1E88E5)),
                       ),
                       const SizedBox(height: 8),
                       const Text(
@@ -73,19 +70,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         decoration: InputDecoration(
                           labelText: 'Username',
                           prefixIcon: const Icon(Icons.person_outline),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF1E88E5),
-                              width: 2,
-                            ),
+                            borderSide: const BorderSide(color: Color(0xFF1E88E5), width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -105,30 +97,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           labelText: 'Password',
                           prefixIcon: const Icon(Icons.lock_outline),
                           suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
+                            icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
                             onPressed: () {
                               setState(() {
                                 _obscurePassword = !_obscurePassword;
                               });
                             },
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Color(0xFF1E88E5),
-                              width: 2,
-                            ),
+                            borderSide: const BorderSide(color: Color(0xFF1E88E5), width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -142,33 +125,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                       // Login Button
                       ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Call your loginNotifierProvider here
-                            ref
-                                .read(loginNotifierProvider.notifier)
-                                .login(
-                                  username: _usernameController.text,
-                                  password: _passwordController.text,
-                                );
-                          }
-                        },
+                        onPressed: loginState.isLoading
+                            ? null
+                            : () {
+                                if (_formKey.currentState!.validate()) {
+                                  ref
+                                      .read(loginNotifierProvider.notifier)
+                                      .login(username: _usernameController.text, password: _passwordController.text);
+                                }
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1E88E5),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           elevation: 2,
                         ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: loginState.isLoading
+                            ? const CircularProgressIndicator()
+                            : Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
                       const SizedBox(height: 16),
 
@@ -177,10 +152,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: () {
                           // Handle forgot password
                         },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Color(0xFF1E88E5)),
-                        ),
+                        child: const Text('Forgot Password?', style: TextStyle(color: Color(0xFF1E88E5))),
                       ),
                     ],
                   ),

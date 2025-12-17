@@ -8,6 +8,7 @@ import 'package:imsomitiapp/features/Member_info/domain/usecase/member_registrat
 
 class MemberRegistrationNotifier extends AsyncNotifier<String?> {
   late MemberRegistrationUsecase memberRegistrationUsecase;
+
   @override
   FutureOr<String?> build() async {
     memberRegistrationUsecase = await ref.read(memberRegUsecaseProvider.future);
@@ -15,7 +16,7 @@ class MemberRegistrationNotifier extends AsyncNotifier<String?> {
   }
 
   Future<void> registerMember({
-     required String givenName,
+    required String givenName,
     String? sureName,
     required String phone,
     String? email,
@@ -29,25 +30,38 @@ class MemberRegistrationNotifier extends AsyncNotifier<String?> {
     String? address,
     String? idenDocu,
     String? photo,
-    required int compId,
-  })async{
+  }) async {
     state = const AsyncLoading();
-    final result = await memberRegistrationUsecase.call(givenName: givenName, phone: phone, compId: compId);
-    state = await result.when(success: (data) {
-      if(data != null){
-        return AsyncData(data);
-      }else{
-        return AsyncValue.error(ApiErrorHandler.handle("No Content"), StackTrace.current);
-      }
-    }, failure: (errorHandler) {
-      return AsyncValue.error(errorHandler, StackTrace.current);
-      
-    },);
+    final result = await memberRegistrationUsecase.call(
+      givenName: givenName,
+      sureName: sureName,
+      email: email,
+      biCNo: biCNo,
+      passportNo: passportNo,
+      address: address,
+      father: father,
+      mother: mother,
 
-
+      photo: photo,
+      idenDocu: idenDocu,
+      gender: gender,
+      niD: niD,
+      nationality: nationality,
+      phone: phone,
+    );
+    state = await result.when(
+      success: (data) {
+        if (data != null) {
+          return AsyncData(data);
+        } else {
+          return AsyncValue.error(ApiErrorHandler.handle("No Content"), StackTrace.current);
+        }
+      },
+      failure: (errorHandler) {
+        return AsyncValue.error(errorHandler, StackTrace.current);
+      },
+    );
   }
 }
 
-final memberRegistraionNotifierProvider = AsyncNotifierProvider<MemberRegistrationNotifier, String?>(
-  () => MemberRegistrationNotifier(),
-);
+final memberRegistraionNotifierProvider = AsyncNotifierProvider<MemberRegistrationNotifier, String?>(() => MemberRegistrationNotifier());

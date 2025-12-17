@@ -24,21 +24,21 @@ class LoginNotifier extends AsyncNotifier<LoginResponseModel?> {
   }
 
   Future<void> login({required String username, required String password}) async {
-    state = AsyncValue.loading();
+    state = const AsyncLoading();
 
     final result = await _loginUseCase.call(username: username, password: password, );
     result.when(
-      success: (user) async {
+      success: (user)  async{
         // ref.read(authStatusProvider.notifier).state = AuthStatus.authenticated;
         await ref.read(newauthStatusProvider.notifier).setAuthenticated(user.token ?? '');
         ref.invalidate(homeparentMenuNotifierProvider);
         await ref.read(homeparentMenuNotifierProvider.future);
 
-        state = AsyncValue.data(user);
+        return AsyncData(user);
       },
       failure: (errorHandler) {
         print('login error message ${errorHandler.apiErrorModel.message}');
-        state = AsyncValue.error(errorHandler.apiErrorModel.message ?? AppStrings.unexpectedError, StackTrace.current);
+        state = AsyncError(errorHandler.apiErrorModel.message ?? AppStrings.unexpectedError, StackTrace.current);
       },
     );
   }

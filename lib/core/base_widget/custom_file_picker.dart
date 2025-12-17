@@ -7,6 +7,7 @@ static Future<String?> pickDocumentBase64() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'docx', 'txt'],
+        withData: true
       );
 
       if (result == null || result.files.isEmpty) return null;

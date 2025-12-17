@@ -19,7 +19,7 @@ abstract class MemberInfoRepository {
   String? address,
   String? idenDocu,
   String? photo,
-  required int compId,
+
  });
   Future<ApiResult<List<MemberInfoAllModel>?>> getAllMemberData();
 }
