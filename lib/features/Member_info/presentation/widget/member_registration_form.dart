@@ -69,7 +69,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                     ),
                     const SizedBox(width: 8),
                     const Text(
-                      "Memeber Registration",
+                      "Member Registration",
                       style: TextStyle(color: Color(0xFF1A1A1A), fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -110,24 +110,37 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                                 radius: 60,
                                 backgroundColor: Colors.transparent,
                                 backgroundImage: _photoBase64 != null ? MemoryImage(dataFromBase64String(_photoBase64!)) : null,
-                                child: _photoFile == null ? const Icon(Icons.person, size: 50, color: Colors.white) : null,
+                                child: _photoBase64 == null ? const Icon(Icons.person, size: 50, color: Colors.white) : null,
                               ),
                             ),
                             Positioned(
                               bottom: 0,
                               right: 0,
-                              child: GestureDetector(
-                                onTap: _pickPhoto,
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
-                                    border: Border.all(color: Colors.white, width: 3),
-                                  ),
-                                  child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
-                                ),
-                              ),
+                              child: _photoBase64 != null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _photoBase64 = null;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                                        child: Center(child: Icon(Icons.clear, color: Colors.white)),
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      onTap: _pickPhoto,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: const LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]),
+                                          border: Border.all(color: Colors.white, width: 3),
+                                        ),
+                                        child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                                      ),
+                                    ),
                             ),
                           ],
                         ),
@@ -177,6 +190,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                         const SizedBox(height: 12),
                         FormField<int>(
                           initialValue: _selectedGender,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
                             if (value == null) {
                               return 'Please Select Gender';
@@ -188,26 +202,32 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                               children: [
                                 Row(
                                   children: [
-                                    Expanded(child: _buildGenderCard(1, 'Male', Icons.male,(){
-                                      setState(() {
-                                        _selectedGender = 1;
-                                      });
-                                      field.didChange(1);
-                                    })),
+                                    Expanded(
+                                      child: _buildGenderCard(1, 'Male', Icons.male, () {
+                                        setState(() {
+                                          _selectedGender = 1;
+                                        });
+                                        field.didChange(1);
+                                      }),
+                                    ),
                                     const SizedBox(width: 12),
-                                    Expanded(child: _buildGenderCard(2, 'Female', Icons.female,(){
-                                      setState(() {
-                                        _selectedGender = 2;
-                                      });
-                                      field.didChange(2);
-                                    })),
+                                    Expanded(
+                                      child: _buildGenderCard(2, 'Female', Icons.female, () {
+                                        setState(() {
+                                          _selectedGender = 2;
+                                        });
+                                        field.didChange(2);
+                                      }),
+                                    ),
                                     const SizedBox(width: 12),
-                                    Expanded(child: _buildGenderCard(3, 'Other', Icons.transgender,(){
-                                      setState(() {
-                                        _selectedGender = 3;
-                                      });
-                                      field.didChange(3);
-                                    })),
+                                    Expanded(
+                                      child: _buildGenderCard(3, 'Other', Icons.transgender, () {
+                                        setState(() {
+                                          _selectedGender = 3;
+                                        });
+                                        field.didChange(3);
+                                      }),
+                                    ),
                                   ],
                                 ),
                                 if (field.hasError)
@@ -219,6 +239,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                             );
                           },
                         ),
+                        const SizedBox(height: 12),
                         _buildModernTextField(
                           controller: _nationalityController,
                           label: 'Nationality',
@@ -346,15 +367,17 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                   Container(
                     margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16, left: 16, right: 16),
                     child: ElevatedButton(
-                      onPressed:memberRegistrationState.isLoading ? null : () {
-                        validateCompleteRegistration(ref);
-                      },
+                      onPressed: memberRegistrationState.isLoading
+                          ? null
+                          : () {
+                              validateCompleteRegistration(ref);
+                            },
                       child: memberRegistrationState.isLoading
                           ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                           : Text(
-                        'Complete Registration',
-                        style: TextStyles.regularRoboto.copyWith(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
-                      ),
+                              'Complete Registration',
+                              style: TextStyles.regularRoboto.copyWith(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
+                            ),
                     ),
                   ),
                   memberRegistrationState.when(
@@ -383,7 +406,11 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                               const SizedBox(height: 12),
                               Text(
                                 isSuccess ? 'Member Registration Successful!' : 'Registration Failed',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: isSuccess ? Colors.green.shade700 : Colors.red.shade700),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: isSuccess ? Colors.green.shade700 : Colors.red.shade700,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -422,7 +449,10 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                                     }
                                   },
                                   icon: const Icon(Icons.arrow_forward),
-                                  label: Text(isSuccess ? 'Go to Login' : 'Try Again', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                                  label: Text(
+                                    isSuccess ? 'Go to Login' : 'Try Again',
+                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                                  ),
                                 ),
                               ),
                             ],
@@ -447,8 +477,8 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                       ),
                     ),
                     error: (err, _) {
-                      if(err is ApiErrorHandler){
-                        return  Container(
+                      if (err is ApiErrorHandler) {
+                        return Container(
                           margin: const EdgeInsets.all(16),
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -469,10 +499,10 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                             ],
                           ),
                         );
-                      }else{
+                      } else {
                         return Text("Something went wrong");
                       }
-                    }
+                    },
                   ),
                 ],
               ),
@@ -600,13 +630,15 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             hintText: hint,
+
             hintStyle: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 15),
             prefixIcon: Icon(icon, color: const Color(0xFF94A3B8), size: 22),
             filled: true,

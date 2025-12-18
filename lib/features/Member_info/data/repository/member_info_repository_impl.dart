@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:imsomitiapp/core/helper/date_converter.dart';
 import 'package:imsomitiapp/core/networking/api_constants.dart';
 import 'package:imsomitiapp/core/networking/api_error_handler.dart' show ApiErrorHandler;
 import 'package:imsomitiapp/core/networking/api_result.dart';
@@ -91,6 +92,9 @@ class MemberInfoRepositoryImpl implements MemberInfoRepository {
           photo: photo,
           nationality: nationality,
           compId: userJson['cid'],
+          createBy: userJson['username'],
+          createDate: DateConverter.dateFormatStyle2(DateTime.now()),
+          updateDate: DateConverter.dateFormatStyle2(DateTime.now()),
         ),
       );
       return result.when(

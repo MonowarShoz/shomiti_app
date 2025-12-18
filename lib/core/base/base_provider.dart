@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:imsomitiapp/core/base/base_local_data_source.dart';
 import 'package:imsomitiapp/core/base/remote_data_source.dart';
 import 'package:imsomitiapp/core/helper/shared_pref_helper.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sharedPreferenceProvider = FutureProvider<SharedPreferences>((ref) async {
   return await SharedPreferences.getInstance();
 });
+final secureStorageProvider = Provider<FlutterSecureStorage>((ref) => FlutterSecureStorage(),);
 
 final dioProvider = FutureProvider<Dio>((ref) async {
   return DioFactory.getDio();
@@ -18,7 +20,8 @@ final dioProvider = FutureProvider<Dio>((ref) async {
 
 final sharedPrefHelperProvider = FutureProvider<SharedPrefHelper>((ref) async {
   final pref = await ref.read(sharedPreferenceProvider.future);
-  return SharedPrefHelper(pref);
+  final secureStorage =  ref.read(secureStorageProvider);
+  return SharedPrefHelper(pref,secureStorage);
 });
 final baseLocalDataSourceProvider = FutureProvider<BaseLocalDataSource>((
   ref,

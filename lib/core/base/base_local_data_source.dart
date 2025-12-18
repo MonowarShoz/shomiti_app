@@ -9,7 +9,7 @@ class BaseLocalDataSource {
 
   Future<void> storeToken(String value) async {
     try {
-      await prefs?.setData(SharedPreferencesKeys.token, value);
+      await prefs?.setSecureStorageString(SharedPreferencesKeys.token, value);
     } catch (error) {
       debugPrint("save token error : $error");
     }
@@ -17,7 +17,7 @@ class BaseLocalDataSource {
 
   Future<String?> getAuthToken()async{
      try {
-      return await prefs?.getString(SharedPreferencesKeys.token,);
+      return await prefs?.getSecureStorageString(SharedPreferencesKeys.token,);
     } catch (e) {
       debugPrint("fetch pref username  : $e");
       return null;

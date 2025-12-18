@@ -9,6 +9,8 @@ import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_p
 import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
 import 'package:imsomitiapp/features/splash/presentation/splash_screen.dart';
 
+import '../../features/Member_info/presentation/widget/member_info_screen.dart';
+
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = GoRouterRefreshNotifier(ref);
@@ -71,6 +73,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         );
 
       } ),
+      GoRoute(path: Routes.memberInfo,name: Routes.memberInfo,builder: (context, state) => MemberInfoScreen(),),
        GoRoute(path: Routes.memberRegistration, name: Routes.memberRegistration, builder: (context, state) => MemberRegistrationFormScreen()),
       // GoRoute(path: Routes.homework, name: Routes.homework, builder: (context, state) => HomeWorkScreen()),
       // GoRoute(path: Routes.allhomework, name: Routes.allhomework, builder: (context, state) => ViewAllHomeworkScreen()),

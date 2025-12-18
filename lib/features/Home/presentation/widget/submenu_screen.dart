@@ -199,7 +199,7 @@ class SubmenuScreen extends ConsumerWidget {
    
     switch (menuName) {
       case "Member Info":
-        context.pushNamed(Routes.memberRegistration);
+        context.pushNamed(Routes.memberInfo);
 
         break;
       default:

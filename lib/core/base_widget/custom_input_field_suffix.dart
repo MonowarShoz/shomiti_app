@@ -6,7 +6,7 @@ import 'package:imsomitiapp/core/theming/colors_manager.dart';
 
 
 
-class CustomTextInputFieldSuffix extends StatelessWidget {
+class CustomTextInputField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType textInputType;
   final String hintText;
@@ -20,7 +20,7 @@ class CustomTextInputFieldSuffix extends StatelessWidget {
   final int? maxLine;
   final Widget? suffix;
 
-  const CustomTextInputFieldSuffix(
+  const CustomTextInputField(
       {super.key,
       this.isSecure = false,
       required this.controller,
@@ -44,7 +44,7 @@ class CustomTextInputFieldSuffix extends StatelessWidget {
       onChanged: onChanged,
       onEditingComplete: onComplete,
 
-      //autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: [
         LengthLimitingTextInputFormatter(textLength),
       ],
