@@ -27,12 +27,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(newauthStatusProvider);
       final loc = state.matchedLocation;
 
-      if (authState == AuthStatus.loading) return null;
+      // if (authState == AuthStatus.loading) return null;
+      if (authState == AuthStatus.loading) {
+        return loc == Routes.splashScreen ? null : Routes.splashScreen;
+      }
+      // 2️⃣ Unauthenticated users
+      if (authState == AuthStatus.unauthenticated) {
+        return loc == Routes.loginScreen ? null : Routes.loginScreen;
+      }
 
       // Unauthenticated → go to login/register
-      if (authState == AuthStatus.unauthenticated && loc != Routes.loginScreen ) {
-        return Routes.loginScreen;
-      }
+      // if (authState == AuthStatus.unauthenticated && loc != Routes.loginScreen ) {
+      //   return Routes.loginScreen;
+      // }
 
       // Authenticated → prevent access to guest pages
       if (authState == AuthStatus.authenticated && (loc == Routes.loginScreen ||  loc == Routes.splashScreen)) {
@@ -42,18 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Otherwise → no redirect
       return null;
 
-      // // 1️⃣ Unauthenticated user: always go to login if not on login/register
-      // if (authState == AuthStatus.unauthenticated && loc != Routes.loginScreen && loc != Routes.registerScreen) {
-      //   return Routes.loginScreen;
-      // }
 
-      // // 2️⃣ Authenticated user: should not visit login/register/splash
-      // if (authState == AuthStatus.authenticated && (loc == Routes.loginScreen || loc == Routes.registerScreen || loc == Routes.splashScreen)) {
-      //   return Routes.home;
-      // }
-
-      // // 3️⃣ All other cases: no redirect
-      // return null;
     },
 
    

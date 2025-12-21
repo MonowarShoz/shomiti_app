@@ -12,22 +12,23 @@ class SplashScreeen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<bool>>(splashNotifierProvider, (previous, next) {
-      print('auth provider ${ref.read(authProvider.notifier).state}');
-      next.whenOrNull(
-        data: (isLoggedIn) {
-          print('Hello from Splash screen $isLoggedIn');
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            isLoggedIn
-                ? context.goNamed(Routes.home)
-                : context.goNamed(Routes.loginScreen);
-          });
-        },
-        error: (error, stackTrace) {
-          print('splash error ${error.toString()}');
-        },
-      );
-    });
+    ref.watch(newauthStatusProvider);
+    // ref.listen<AsyncValue<bool>>(splashNotifierProvider, (previous, next) {
+    //   print('auth provider ${ref.read(authProvider.notifier).state}');
+    //   next.whenOrNull(
+    //     data: (isLoggedIn) {
+    //       print('Hello from Splash screen $isLoggedIn');
+    //       WidgetsBinding.instance.addPostFrameCallback((_) {
+    //         isLoggedIn
+    //             ? context.goNamed(Routes.home)
+    //             : context.goNamed(Routes.loginScreen);
+    //       });
+    //     },
+    //     error: (error, stackTrace) {
+    //       print('splash error ${error.toString()}');
+    //     },
+    //   );
+    // });
     //  final splashState = ref.watch(splashNotifierProvider);
 
     // splashState.when(
@@ -46,7 +47,9 @@ class SplashScreeen extends ConsumerWidget {
     // );
     return Scaffold(
       backgroundColor: ColorsManager.white,
-      body: SafeArea(child: Center(child: Image.asset(AppAssets.appLogo,fit: BoxFit.cover,height: 100,width: 100,))),
+      body: SafeArea(
+        child: Center(child: Image.asset(AppAssets.appLogo, fit: BoxFit.cover, height: 100, width: 100)),
+      ),
     );
   }
 }

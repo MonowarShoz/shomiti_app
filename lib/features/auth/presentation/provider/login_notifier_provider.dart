@@ -103,11 +103,13 @@ class AuthStatusNotifier extends StateNotifier<AuthStatus> {
   Future<void> setAuthenticated(String token) async {
      final baseLocalDataSource = await ref.read(baseLocalDataSourceProvider.future);
     await baseLocalDataSource.storeToken(token);
+     if (!mounted) return;
     state = AuthStatus.authenticated;
   }
   Future<void> seUntAuthenticated() async {
      final baseLocalDataSource = await ref.read(baseLocalDataSourceProvider.future);
     await baseLocalDataSource.storeToken('');
+     if (!mounted) return;
     state = AuthStatus.unauthenticated;
   }
 }

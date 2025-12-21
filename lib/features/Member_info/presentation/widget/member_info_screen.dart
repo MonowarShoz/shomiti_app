@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:imsomitiapp/core/helper/extensions.dart';
 import 'package:imsomitiapp/core/networking/api_error_handler.dart';
 import 'package:imsomitiapp/features/Member_info/presentation/provider/member_filter_notifier.dart';
+import 'package:imsomitiapp/features/Member_info/presentation/widget/member_details_widget.dart';
 
 import '../../../../core/base_widget/custom_input_field_suffix.dart';
 import '../../../../core/routing/routes.dart';
@@ -25,7 +26,7 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
     final filteredList = ref.watch(filteredMemberProvider);
     return Scaffold(
       body: CustomScrollView(
-        shrinkWrap: true,
+        //shrinkWrap: true,
         slivers: [
           SliverAppBar(
             title: const Text('Members List', style: TextStyle(fontWeight: FontWeight.w600)),
@@ -101,12 +102,13 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                 );
               } else {
                 if (filteredList.isEmpty) {
-                  return _buildEmptyState(icon: Icons.search_off, title: 'No Results Found', message: 'Try different search terms');
+                  return SliverFillRemaining(
+                    child: _buildEmptyState(icon: Icons.search_off, title: 'No Results Found', message: 'Try different search terms'),
+                  );
                 } else {
                   return SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverList(
-
                       delegate: SliverChildBuilderDelegate((context, index) {
                         final member = filteredList[index];
                         return Container(
@@ -118,7 +120,23 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Navigate to member detail
+
+                                showGeneralDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  barrierLabel: 'Close',
+                                  transitionDuration: const Duration(milliseconds: 300),
+                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                    return MemberDetailDialog(memberData: member);
+                                  },
+                                  transitionBuilder: (context, animation, secondaryAnimation, child) {
+                                    return ScaleTransition(
+                                      scale: Tween<double>(begin: 0.8, end: 1.0).animate(CurvedAnimation(parent: animation, curve: Curves.easeInCubic)),
+                                      child: FadeTransition(opacity: animation, child: child),
+                                    );
+                                  },
+                                );
+
                             },
                             borderRadius: BorderRadius.circular(12),
                             child: Padding(
@@ -138,7 +156,6 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                                   //     ),
                                   //   ),
                                   // ),
-
                                   const SizedBox(width: 16),
 
                                   // Member Info
@@ -151,29 +168,25 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                                             Expanded(
                                               child: Text(
                                                 member.givenName ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black87,
-                                                ),
+                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[100],
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Text(
-                                                '${member.memNo ?? 0}',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.grey[700],
-                                                ),
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                            //   decoration: BoxDecoration(
+                                            //     color: Colors.grey[100],
+                                            //     borderRadius: BorderRadius.circular(6),
+                                            //   ),
+                                            //   child: Text(
+                                            //     '${member.memNo ?? 0}',
+                                            //     style: TextStyle(
+                                            //       fontSize: 12,
+                                            //       fontWeight: FontWeight.w600,
+                                            //       color: Colors.grey[700],
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
 
@@ -183,13 +196,7 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                                           children: [
                                             Icon(Icons.phone, size: 14, color: Colors.grey[500]),
                                             const SizedBox(width: 6),
-                                            Text(
-                                             member.phone ?? '',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
+                                            Text(member.phone ?? '', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                                           ],
                                         ),
 
@@ -202,10 +209,7 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                                             Expanded(
                                               child: Text(
                                                 member.address ?? '',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.grey[600],
-                                                ),
+                                                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
@@ -227,19 +231,16 @@ class _MemberInfoScreenState extends ConsumerState<MemberInfoScreen> {
                   );
                 }
               }
-
-
             },
             error: (error, stackTrace) {
-              if(error is ApiErrorHandler){
-                return _buildErrorState(error.apiErrorModel.message ?? "");
-              }else{
-                return Text('Something went wrong');
+              if (error is ApiErrorHandler) {
+                return SliverFillRemaining(child: _buildErrorState(error.apiErrorModel.message ?? ""));
+              } else {
+                return SliverFillRemaining(child: Text('Something went wrong'));
               }
-
             },
             loading: () {
-              return CircularProgressIndicator();
+              return SliverFillRemaining(child: Center(child: CircularProgressIndicator()));
             },
           ),
         ],

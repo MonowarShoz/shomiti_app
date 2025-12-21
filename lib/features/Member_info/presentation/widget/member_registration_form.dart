@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imsomitiapp/core/base_widget/custom_file_picker.dart';
 import 'package:imsomitiapp/core/base_widget/custom_image_picker.dart';
+import 'package:imsomitiapp/core/helper/extensions.dart';
 import 'package:imsomitiapp/core/helper/image_helper.dart';
 import 'package:imsomitiapp/core/networking/api_error_handler.dart';
 import 'package:imsomitiapp/core/theming/text_styles.dart';
+import 'package:imsomitiapp/features/Member_info/presentation/provider/member_data_notifier.dart';
 import 'package:imsomitiapp/features/Member_info/presentation/provider/member_registration_notifier.dart';
+
+import '../../../../core/routing/routes.dart';
 
 class MemberRegistrationFormScreen extends ConsumerStatefulWidget {
   const MemberRegistrationFormScreen({super.key});
@@ -385,7 +389,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                       if (data != null && data.isNotEmpty) {
                         final isSuccess = !data.toLowerCase().contains('failed');
                         return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          margin:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: isSuccess ? Colors.green.shade50 : Colors.red.shade50,
@@ -430,6 +434,8 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                                   ),
                                   onPressed: () {
                                     if (isSuccess) {
+                                      ref.invalidate(memberDataNotifierProvider);
+                                      context.pushNamed(Routes.memberInfo);
                                       //context.go(Routes.loginScreen);
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
@@ -450,7 +456,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                                   },
                                   icon: const Icon(Icons.arrow_forward),
                                   label: Text(
-                                    isSuccess ? 'Go to Login' : 'Try Again',
+                                    isSuccess ? 'View in List' : 'Try Again',
                                     style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                                   ),
                                 ),
@@ -470,7 +476,7 @@ class _MemberRegistrationFormScreenState extends ConsumerState<MemberRegistratio
                           const CircularProgressIndicator(color: Color(0xFF667EEA)),
                           const SizedBox(height: 12),
                           Text(
-                            'Registering your school...',
+                            'Registering your Member...',
                             style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w600),
                           ),
                         ],

@@ -23,7 +23,7 @@ class BaseRemoteDataSource {
       return ApiResult.success(result);
     } catch (error)
     {
-      if(error is DioException && error.response!.statusCode == 401){
+      if(error is DioException && error.response?.statusCode == 401){
         await ref.read(newauthStatusProvider.notifier).seUntAuthenticated();
         // ref.read(authStatusProvider.notifier).state =
         //       AuthStatus.unauthenticated;
