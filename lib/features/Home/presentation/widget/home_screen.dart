@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:imsomitiapp/core/helper/extensions.dart';
+import 'package:imsomitiapp/core/networking/api_error_handler.dart';
 import 'package:imsomitiapp/core/routing/routes.dart';
 import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
@@ -23,10 +24,7 @@ class HomeScreen extends ConsumerWidget {
             Container(
               width: 60,
               height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
               child: Image.asset(
                 AppAssets.appLogo,
                 //color: Colors.white,
@@ -59,10 +57,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           IconButton(
-            icon: Icon(
-              Icons.logout,
-              color: const Color.fromARGB(255, 4, 65, 170),
-            ),
+            icon: Icon(Icons.logout, color: const Color.fromARGB(255, 4, 65, 170)),
             onPressed: () async {
               final shouldLogout = await showDialog<bool>(
                 context: context,
@@ -71,14 +66,8 @@ class HomeScreen extends ConsumerWidget {
                     title: const Text('Confirm Logout'),
                     content: const Text('Are you sure you want to logout?'),
                     actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('Logout'),
-                      ),
+                      TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
+                      TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Logout')),
                     ],
                   );
                 },
@@ -88,9 +77,7 @@ class HomeScreen extends ConsumerWidget {
                   final notifier = ref.read(logOutNotifierProvider.notifier);
 
                   await notifier.logOut();
-                  await ref
-                      .read(newauthStatusProvider.notifier)
-                      .seUntAuthenticated();
+                  await ref.read(newauthStatusProvider.notifier).seUntAuthenticated();
                   //ref.read(authStatusProvider.notifier).state = AuthStatus.unauthenticated;
 
                   // final loggedOut = ref
@@ -101,9 +88,7 @@ class HomeScreen extends ConsumerWidget {
                   // }
                 } catch (e) {
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Logout failed: $e')),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Logout failed: $e')));
                   }
                 }
               }
@@ -129,27 +114,30 @@ class HomeScreen extends ConsumerWidget {
               itemCount: menus.length,
               itemBuilder: (context, index) {
                 final menu = menus[index];
-                return MenuGridItem(menu: menu,ref: ref,);
+                return MenuGridItem(menu: menu, ref: ref);
               },
             ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text('Error: ${error.toString()}'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => ref.refresh(homeparentMenuNotifierProvider),
-                child: const Text('Retry'),
+        error: (error, stack) {
+          if (error is ApiErrorHandler) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('Error: ${error.apiErrorModel.message}'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(onPressed: () => ref.refresh(homeparentMenuNotifierProvider), child: const Text('Retry')),
+                ],
               ),
-            ],
-          ),
-        ),
+            );
+          }else{
+            return    Center(child: Text('Error: ${error.toString()}'));
+          }
+        },
       ),
     );
   }
@@ -163,11 +151,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
     final menuAsyncValue = ref.watch(homeparentMenuNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Menu'),
-        centerTitle: true,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Menu'), centerTitle: true, elevation: 0),
       body: menuAsyncValue.when(
         data: (menus) {
           if (menus.isEmpty) {
@@ -186,7 +170,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
               itemCount: menus.length,
               itemBuilder: (context, index) {
                 final menu = menus[index];
-                return MenuGridItem(menu: menu,ref: ref,);
+                return MenuGridItem(menu: menu, ref: ref);
               },
             ),
           );
@@ -200,10 +184,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               Text('Error: ${error.toString()}'),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => ref.refresh(homeparentMenuNotifierProvider),
-                child: const Text('Retry'),
-              ),
+              ElevatedButton(onPressed: () => ref.refresh(homeparentMenuNotifierProvider), child: const Text('Retry')),
             ],
           ),
         ),
@@ -216,7 +197,7 @@ class MenuGridItem extends StatelessWidget {
   final ParentMenuModel menu;
   final WidgetRef ref;
 
-  const MenuGridItem({super.key, required this.menu,required this.ref});
+  const MenuGridItem({super.key, required this.menu, required this.ref});
 
   IconData _getIconForMenu(String menuName) {
     final name = menuName.toLowerCase();
@@ -232,18 +213,10 @@ class MenuGridItem extends StatelessWidget {
   }
 
   Color _getColorForIndex(int id) {
-    final colors = [
-      Colors.blue,
-      Colors.purple,
-      Colors.orange,
-      Colors.teal,
-      Colors.pink,
-      Colors.indigo,
-      Colors.cyan,
-      Colors.deepOrange,
-    ];
+    final colors = [Colors.blue, Colors.purple, Colors.orange, Colors.teal, Colors.pink, Colors.indigo, Colors.cyan, Colors.deepOrange];
     return colors[id % colors.length];
   }
+
   //  void navigatingToModule(BuildContext context, String menuName) {
   //   context.pushNamed(Routes.allhomework,extra: {
   //     'menuName':
@@ -272,19 +245,12 @@ class MenuGridItem extends StatelessWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: () async{
-         await ref.read(subMenuNotifierProvider.notifier).loadSubMenu(menu.id!);
-         if(context.mounted){
-          context.pushNamed(
-            Routes.subMenu,
-            extra: {
-              'menuName': menu.menuName,
-              'icon': _getIconForMenu(menu.menuName!),
-              'color': color,
-            },
-          );
-         }
-          
+        onTap: () async {
+          await ref.read(subMenuNotifierProvider.notifier).loadSubMenu(menu.id!);
+          if (context.mounted) {
+            context.pushNamed(Routes.subMenu, extra: {'menuName': menu.menuName, 'icon': _getIconForMenu(menu.menuName!), 'color': color});
+          }
+
           // navigatingToModule(context,menu.menuName ?? "");
           // Navigate to menu.menuUrl
           // Navigator.pushNamed(context, menu.menuUrl);
@@ -303,11 +269,7 @@ class MenuGridItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
 
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [color.withOpacity(0.2), color.withOpacity(0.5)],
-            ),
+            gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color.withOpacity(0.2), color.withOpacity(0.5)]),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -315,27 +277,15 @@ class MenuGridItem extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  _getIconForMenu(menu.menuName!),
-                  size: 28,
-                  color: color,
-                ),
+                decoration: BoxDecoration(color: color.withOpacity(0.2), shape: BoxShape.circle),
+                child: Icon(_getIconForMenu(menu.menuName!), size: 28, color: color),
               ),
               const SizedBox(height: 8),
               Flexible(
                 child: Text(
                   menu.menuName!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[800],
-                    height: 1.2,
-                  ),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.grey[800], height: 1.2),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

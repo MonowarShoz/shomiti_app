@@ -1,7 +1,7 @@
 import 'package:imsomitiapp/core/utils/app_strings.dart';
 
 class ApiConstants {
-  static const String baseUrl = "http://192.168.20.101:807/";
+  static const String baseUrl = "http://192.168.20.56:807";
   //static const String baseUrl = "http://rubims.lged.gov.bd";
   //static const String baseUrl = "http://test.ourhomework.xyz/NotePublish";
   //static const String baseUrl = "http://192.168.66.45/NotePublish";
@@ -33,6 +33,12 @@ class ApiConstants {
   static const String kistireceivehistory = "/api/KistiCtrl/kistireceivehistory";
   static const String kistiTypeByProject = "/api/KistiCtrl/kistytypebyproject";
   static const String savekistiType = "/api/KistiCtrl/savekistitype";
+
+  //project
+  static const String projectInfo = "/api/ProjectCtrl/getproject";
+  static const String saveproject = "/api/ProjectCtrl/save-project";
+  static const String saveassignproject = "/api/ProjectCtrl/save-assign-project";
+  static const String getassign = "/api/ProjectCtrl/getassign";
 
  
 

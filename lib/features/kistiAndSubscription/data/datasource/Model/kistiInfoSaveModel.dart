@@ -1,18 +1,16 @@
 import 'dart:convert';
 
-KistiSaveModel kistiSaveModelFromJson(String str) => KistiSaveModel.fromJson(json.decode(str));
 
-String kistiSaveModelToJson(KistiSaveModel data) => json.encode(data.toJson());
 
 class KistiSaveModel {
-  int? id;
-  String? typeName;
-  int? crid;
-  int? amount;
-  String? createdate;
-  String? updatedate;
-  int? compId;
-  int? projectid;
+  final int? id;
+  final String? typeName;
+  final int? crid;
+  final int? amount;
+  final String? createdate;
+  final String? updatedate;
+  final int? compId;
+  final int? projectid;
 
   KistiSaveModel({
     this.id,

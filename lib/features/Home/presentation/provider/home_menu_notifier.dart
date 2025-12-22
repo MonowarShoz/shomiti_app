@@ -26,10 +26,10 @@ class HomeParentMenuNotifier extends AsyncNotifier<List<ParentMenuModel>> {
           //     AuthStatus.unauthenticated;
          //await ref.read(logOutNotifierProvider.notifier).logOut();
           
-          return [];
+          throw errorHandler.apiErrorModel.message ?? "401, Unauthenticated";
         } else {
           print('logo error message $statusCode');
-          return [];
+          throw errorHandler.apiErrorModel.message ?? "Failed to Load menu";
         }
         // return [];
        

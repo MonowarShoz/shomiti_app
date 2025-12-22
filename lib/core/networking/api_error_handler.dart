@@ -107,6 +107,10 @@ ApiErrorModel _handleError(DioException error) {
             message: "Token Expired"
 
           );
+        }else if(error.response?.statusCode == 404){
+          return ApiErrorModel(code: 404,data: {"data": "Bad Request"},message: 'Not Found');
+        }else if(error.response!.statusCode! > 500){
+          return ApiErrorModel(code: 500,data: {"data": "Bad Request"},message: 'Internal Server Error');
         } else {
           if (data is Map<String, dynamic>) {
             // JSON error
