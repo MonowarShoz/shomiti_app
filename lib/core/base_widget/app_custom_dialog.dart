@@ -142,3 +142,29 @@ class _AppCustomDialogState extends State<AppCustomDialog> {
     );
   }
 }
+
+class AppSnackBar {
+  static void show(
+      BuildContext context, {
+        required String message,
+        IconData icon = Icons.error,
+        Color backgroundColor = Colors.red,
+      }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 8),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+}

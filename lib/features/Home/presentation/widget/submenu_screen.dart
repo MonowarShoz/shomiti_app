@@ -9,18 +9,16 @@ class SubmenuScreen extends ConsumerWidget {
   final String menuTitle;
   final IconData headersubMenuIcon;
   final Color subMenuColor;
-  const SubmenuScreen({
-    super.key,
-    required this.menuTitle,
-    required this.headersubMenuIcon,
-    required this.subMenuColor,
-  });
+
+  const SubmenuScreen({super.key, required this.menuTitle, required this.headersubMenuIcon, required this.subMenuColor});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subMenuState = ref.watch(subMenuNotifierProvider);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         title: Row(
           children: [
             //Icon(headersubMenuIcon),
@@ -47,21 +45,19 @@ class SubmenuScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final subMenu = subMenuList[index];
                 return GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     HapticFeedback.lightImpact();
                   },
                   child: Card(
                     elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: InkWell(
                       onTap: () {
-                        navigatingToModule(context,subMenu.menuName ?? '');
+                        navigatingToModule(context, subMenu.menuName ?? '');
                         // navigatingToModule(context,menu.menuName ?? "");
                         // Navigate to menu.menuUrl
                         // Navigator.pushNamed(context, menu.menuUrl);
-                  
+
                         // Or show a snackbar for demonstration
                         // ScaffoldMessenger.of(context).showSnackBar(
                         //   SnackBar(
@@ -75,14 +71,11 @@ class SubmenuScreen extends ConsumerWidget {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                  
+
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [
-                              subMenuColor.withOpacity(0.2),
-                              subMenuColor.withOpacity(0.5),
-                            ],
+                            colors: [subMenuColor.withOpacity(0.2), subMenuColor.withOpacity(0.5)],
                           ),
                         ),
                         child: Column(
@@ -91,27 +84,15 @@ class SubmenuScreen extends ConsumerWidget {
                           children: [
                             Container(
                               padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: subMenuColor.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.menu,
-                                size: 28,
-                                color: Colors.black,
-                              ),
+                              decoration: BoxDecoration(color: subMenuColor.withOpacity(0.2), shape: BoxShape.circle),
+                              child: Icon(Icons.menu, size: 28, color: Colors.black),
                             ),
                             const SizedBox(height: 8),
                             Flexible(
                               child: Text(
                                 subMenu.menuName!,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey[800],
-                                  height: 1.2,
-                                ),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.grey[800], height: 1.2),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -137,11 +118,7 @@ class SubmenuScreen extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     'Oops! Something went wrong',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[800],
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[800]),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -160,13 +137,8 @@ class SubmenuScreen extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: subMenuColor,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                   ),
                 ],
@@ -179,14 +151,9 @@ class SubmenuScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(subMenuColor),
-                ),
+                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(subMenuColor)),
                 const SizedBox(height: 16),
-                Text(
-                  'Loading $menuTitle...',
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
+                Text('Loading $menuTitle...', style: TextStyle(fontSize: 16, color: Colors.grey[600])),
               ],
             ),
           );
@@ -195,20 +162,18 @@ class SubmenuScreen extends ConsumerWidget {
     );
   }
 
-   void navigatingToModule(BuildContext context, String menuName) {
-   
+  void navigatingToModule(BuildContext context, String menuName) {
     switch (menuName) {
       case "Member Info":
         context.pushNamed(Routes.memberInfo);
 
         break;
+      case "Kisti Info":
+        context.pushNamed(Routes.kistiInfo);
+        break;
+
       default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Under Construction ${menuName}'),
-            duration: const Duration(seconds: 1),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Under Construction ${menuName}'), duration: const Duration(seconds: 1)));
     }
   }
 }

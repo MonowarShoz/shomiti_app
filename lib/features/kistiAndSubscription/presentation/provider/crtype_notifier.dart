@@ -11,11 +11,11 @@ import '../../domain/usecase/crtype_usecase.dart';
 
 
 
-class CrtypeNotifier extends AsyncNotifier<List<CrtypeModel>?> {
+class CrtypeNotifier extends AsyncNotifier<List<CrtypeModel>> {
   late CrTypeUsecase crTypeUsecase;
 
   @override
-  FutureOr<List<CrtypeModel>?> build() async {
+  FutureOr<List<CrtypeModel>> build() async {
     crTypeUsecase = await ref.read(crtypeUsecaseProvider.future);
     final result = await crTypeUsecase.call();
     return result.when(
@@ -29,6 +29,6 @@ class CrtypeNotifier extends AsyncNotifier<List<CrtypeModel>?> {
   }
 }
 
-final projectInfoNotifierProvider = AsyncNotifierProvider<CrtypeNotifier, List<CrtypeModel>?>(() {
+final creditNotifierProvider = AsyncNotifierProvider<CrtypeNotifier, List<CrtypeModel>>(() {
   return CrtypeNotifier();
 });

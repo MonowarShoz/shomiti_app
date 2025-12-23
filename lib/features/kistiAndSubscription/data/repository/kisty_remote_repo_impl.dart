@@ -106,13 +106,13 @@ class KistyRepoImpl  implements KistyRepository {
       return result.when(
         success: (data) {
           if (data != null) {
-            final Map jsonData = jsonDecode(data);
-            final successRes = jsonData["message"];
-            print('success result $successRes');
+            // final Map jsonData = jsonDecode(data);
+            // final successRes = jsonData["message"];
+            print('success result $data');
             // if (successRes.toString().toLowerCase().contains('failed')) {
             //   return ApiResult.failure(ApiErrorHandler.handle('$successRes'));
             // } else {
-            return ApiResult.success(successRes);
+            return ApiResult.success(data);
             //}
           } else {
             return ApiResult.failure(ApiErrorHandler.handle('No content'));

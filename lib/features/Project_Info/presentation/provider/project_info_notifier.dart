@@ -7,11 +7,11 @@ import 'package:imsomitiapp/features/Project_Info/domain/usecase/project_info_us
 
 import '../../domain/provider/project_usecase_provider.dart';
 
-class ProjectInfoNotifier extends AsyncNotifier<List<GetProjectModel>?> {
+class ProjectInfoNotifier extends AsyncNotifier<List<GetProjectModel>> {
   late ProjectInfoUsecase projectInfoUsecase;
 
   @override
-  FutureOr<List<GetProjectModel>?> build() async {
+  FutureOr<List<GetProjectModel>> build() async {
     projectInfoUsecase = await ref.read(projectInfoDataUsecaseProvider.future);
     final result = await projectInfoUsecase.call();
     return result.when(
@@ -25,6 +25,6 @@ class ProjectInfoNotifier extends AsyncNotifier<List<GetProjectModel>?> {
   }
 }
 
-final projectInfoNotifierProvider = AsyncNotifierProvider<ProjectInfoNotifier, List<GetProjectModel>?>(() {
+final projectInfoNotifierProvider = AsyncNotifierProvider<ProjectInfoNotifier, List<GetProjectModel>>(() {
   return ProjectInfoNotifier();
 });

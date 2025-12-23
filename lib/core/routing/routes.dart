@@ -11,8 +11,8 @@ class Routes {
   // Main tab routes (used within ShellRoute)
   static const String home = '/home';
   static const String subMenu = '/submenu';
-  static const String teachermapping ='/teachermapping';
-  static const String homework = '/homework';
+  static const String kistiInfo ='/kistiInfo';
+  static const String kistiSave = '/kistiSave';
   static const String allhomework = '/allhomework';
   static const String hwByuser = '/userhomework';
   static const String hwMap = '/hwmap';
