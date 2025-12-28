@@ -7,7 +7,7 @@ import 'package:imsomitiapp/features/Home/presentation/provider/home_sub_menu_no
 
 class SubmenuScreen extends ConsumerWidget {
   final String menuTitle;
-  final IconData headersubMenuIcon;
+  final String headersubMenuIcon;
   final Color subMenuColor;
 
   const SubmenuScreen({super.key, required this.menuTitle, required this.headersubMenuIcon, required this.subMenuColor});
@@ -85,7 +85,7 @@ class SubmenuScreen extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(color: subMenuColor.withOpacity(0.2), shape: BoxShape.circle),
-                              child: Icon(Icons.menu, size: 28, color: Colors.black),
+                              child: Image.asset(headersubMenuIcon,height: 30,width: 30,),
                             ),
                             const SizedBox(height: 8),
                             Flexible(

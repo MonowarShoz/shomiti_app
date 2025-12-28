@@ -11,6 +11,8 @@ import 'package:imsomitiapp/features/Home/presentation/provider/home_sub_menu_no
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/settings/presentation/provider/setting_notifier.dart';
 
+import 'menugrid_tile.dart';
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -134,8 +136,8 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             );
-          }else{
-            return    Center(child: Text('Error: ${error.toString()}'));
+          } else {
+            return Center(child: Text('Error: ${error.toString()}'));
           }
         },
       ),
@@ -159,7 +161,7 @@ class HomeMenuGridScreen extends ConsumerWidget {
           }
 
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -192,108 +194,13 @@ class HomeMenuGridScreen extends ConsumerWidget {
     );
   }
 }
+final List<Color> tileColors = [
+  Color(0xFF1E293B), // Slate 800
+  Color(0xFF334155), // Slate 700
+  Color(0xFF475569), // Slate 600
+  Color(0xFF64748B), // Slate 500
+  Color(0xFF94A3B8), // Slate 400
+  Color(0xFFCBD5E1), // Slate 300
+];
 
-class MenuGridItem extends StatelessWidget {
-  final ParentMenuModel menu;
-  final WidgetRef ref;
 
-  const MenuGridItem({super.key, required this.menu, required this.ref});
-
-  IconData _getIconForMenu(String menuName) {
-    final name = menuName.toLowerCase();
-    if (name.contains('dashboard')) return Icons.dashboard;
-    if (name.contains('profile')) return Icons.person;
-    if (name.contains('settings')) return Icons.settings;
-    if (name.contains('report')) return Icons.assessment;
-    if (name.contains('user')) return Icons.people;
-    if (name.contains('product')) return Icons.inventory;
-    if (name.contains('order')) return Icons.shopping_cart;
-    if (name.contains('payment')) return Icons.payment;
-    return Icons.menu;
-  }
-
-  Color _getColorForIndex(int id) {
-    final colors = [Colors.blue, Colors.purple, Colors.orange, Colors.teal, Colors.pink, Colors.indigo, Colors.cyan, Colors.deepOrange];
-    return colors[id % colors.length];
-  }
-
-  //  void navigatingToModule(BuildContext context, String menuName) {
-  //   context.pushNamed(Routes.allhomework,extra: {
-  //     'menuName':
-
-  //   });
-  //   // switch (menuName) {
-  //   //   case "Member Info":
-  //   //     context.pushNamed(Routes.memberRegistration);
-
-  //   //     break;
-  //   //   default:
-  //   //     ScaffoldMessenger.of(context).showSnackBar(
-  //   //       SnackBar(
-  //   //         content: Text('Under Construction ${menu.menuName}'),
-  //   //         duration: const Duration(seconds: 1),
-  //   //       ),
-  //   //     );
-  //   // }
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _getColorForIndex(menu.id!);
-
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: InkWell(
-        onTap: () async {
-          await ref.read(subMenuNotifierProvider.notifier).loadSubMenu(menu.id!);
-          if (context.mounted) {
-            context.pushNamed(Routes.subMenu, extra: {'menuName': menu.menuName, 'icon': _getIconForMenu(menu.menuName!), 'color': color});
-          }
-
-          // navigatingToModule(context,menu.menuName ?? "");
-          // Navigate to menu.menuUrl
-          // Navigator.pushNamed(context, menu.menuUrl);
-
-          // Or show a snackbar for demonstration
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('Navigating to ${menu.menuName}'),
-          //     duration: const Duration(seconds: 1),
-          //   ),
-          // );
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-
-            gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color.withOpacity(0.2), color.withOpacity(0.5)]),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: color.withOpacity(0.2), shape: BoxShape.circle),
-                child: Icon(_getIconForMenu(menu.menuName!), size: 28, color: color),
-              ),
-              const SizedBox(height: 8),
-              Flexible(
-                child: Text(
-                  menu.menuName!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.grey[800], height: 1.2),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

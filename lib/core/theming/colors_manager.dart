@@ -41,4 +41,63 @@ class ColorsManager {
   static const Color lightBlueSky = Color.fromARGB(255, 248, 250, 250);
 
 
+  Color _getColorForIndex(int id) {
+    final colors = [
+      Color(0xFF93C5FD), // Light Blue
+      Color(0xFFFBBF24), // Light Amber
+      Color(0xFF34D399), // Light Green
+      Color(0xFFF472B6), // Light Pink
+      Color(0xFFA78BFA), // Light Purple
+      Color(0xFF60A5FA), // Sky Blue
+      Color(0xFFFCA5A5), // Light Red
+      Color(0xFF2DD4BF), // Light Teal
+    ];
+    return colors[id % colors.length];
+  }
+
+  //profess
+  Color getfColorForIndex(int id) {
+    final colors = [
+      Color(0xFF1E40AF), // Professional Blue
+      Color(0xFF7C2D12), // Professional Brown
+      Color(0xFF065F46), // Professional Green
+      Color(0xFF9333EA), // Professional Purple
+      Color(0xFFB91C1C), // Professional Red
+      Color(0xFF0E7490), // Professional Teal
+      Color(0xFFCA8A04), // Professional Gold
+      Color(0xFF4338CA), // Professional Indigo
+    ];
+    return colors[id % colors.length];
+  }
+  //google
+  Color getGColorForIndex(int id) {
+    final colors = [
+      Color(0xFF6750A4), // M3 Primary
+      Color(0xFF7D5260), // M3 Secondary
+      Color(0xFF386A20), // M3 Tertiary
+      Color(0xFFB3261E), // M3 Error
+      Color(0xFF006A6A), // M3 Teal
+      Color(0xFFB3261E), // M3 Red
+      Color(0xFF7D5260), // M3 Purple
+      Color(0xFF006874), // M3 Blue
+    ];
+    return colors[id % colors.length];
+  }
+
+  //rec
+  Color getrColorForIndex(int id) {
+    final colors = [
+      Color(0xFF6366F1), // Indigo - Professional
+      Color(0xFF10B981), // Emerald - Fresh
+      Color(0xFFF59E0B), // Amber - Warm
+      Color(0xFFEC4899), // Pink - Friendly
+      Color(0xFF8B5CF6), // Purple - Creative
+      Color(0xFF06B6D4), // Cyan - Modern
+      Color(0xFFEF4444), // Red - Urgent
+      Color(0xFF3B82F6), // Blue - Trustworthy
+    ];
+    return colors[id % colors.length];
+  }
+
+
 }
