@@ -33,6 +33,10 @@ class ApiConstants {
   static const String kistireceivehistory = "/api/KistiCtrl/kistireceivehistory";
   static const String kistiTypeByProject = "/api/KistiCtrl/kistytypebyproject";
   static const String savekistiType = "/api/KistiCtrl/savekistitype";
+  //subscription type
+  static const String subscriptionTypeEntry = "/api/SubscriptionCtrl/savesubscriptiontype";
+  static const String getsubscriptiontypes = "/api/SubscriptionCtrl/subscriptiontypes";
+
 
   //project
   static const String projectInfo = "/api/ProjectCtrl/getproject";

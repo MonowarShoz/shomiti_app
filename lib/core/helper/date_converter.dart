@@ -14,6 +14,10 @@ class DateConverter {
     String date = DateFormat('dd-MMM-yyyy').format(dateTime!);
     return date;
   }
+  static String dateFormatStyle3(DateTime? dateTime) {
+    String date = DateFormat('yyyy-MM-dd').format(dateTime!);
+    return date;
+  }
 
   static String apiDbDateFormatI(String date) {
     DateFormat df = DateFormat("yyyy-MM-ddTHH:mm:ss.SSSSSSZ"); //2023-10-19T09:58:52.000000Z
