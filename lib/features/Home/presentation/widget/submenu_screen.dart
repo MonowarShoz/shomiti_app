@@ -171,6 +171,9 @@ class SubmenuScreen extends ConsumerWidget {
       case "Kisti Info":
         context.pushNamed(Routes.kistiInfo);
         break;
+      case "Project":
+        context.pushNamed(Routes.project);
+        break;
 
       default:
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Under Construction ${menuName}'), duration: const Duration(seconds: 1)));

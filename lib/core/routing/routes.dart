@@ -13,8 +13,8 @@ class Routes {
   static const String subMenu = '/submenu';
   static const String kistiInfo ='/kistiInfo';
   static const String kistiSave = '/kistiSave';
-  static const String allhomework = '/allhomework';
-  static const String hwByuser = '/userhomework';
+  static const String project = '/project';
+  static const String projectEntry = '/projectEntry';
   static const String hwMap = '/hwmap';
    static const String notice = '/notice';
   static const String chat = '/chat';

@@ -5,6 +5,7 @@ import 'package:imsomitiapp/core/routing/routes.dart';
 import 'package:imsomitiapp/features/Home/presentation/widget/home_screen.dart';
 import 'package:imsomitiapp/features/Home/presentation/widget/submenu_screen.dart';
 import 'package:imsomitiapp/features/Member_info/presentation/widget/member_registration_form.dart';
+import 'package:imsomitiapp/features/Project_Info/presentation/widget/project_info_screen.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/kisti_info_screen.dart';
@@ -12,6 +13,7 @@ import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/ki
 import 'package:imsomitiapp/features/splash/presentation/splash_screen.dart';
 
 import '../../features/Member_info/presentation/widget/member_info_screen.dart';
+import '../../features/Project_Info/presentation/widget/project_add_directory/project_entry_screen.dart';
 
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -74,8 +76,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.memberInfo,name: Routes.memberInfo,builder: (context, state) => MemberInfoScreen(),),
        GoRoute(path: Routes.memberRegistration, name: Routes.memberRegistration, builder: (context, state) => MemberRegistrationFormScreen()),
       GoRoute(path: Routes.kistiInfo,name: Routes.kistiInfo,builder: (context, state) => KistiInfoScreen(),),
-      //GoRoute(path: Routes.kistiSave,name: Routes.kistiSave,builder: (context, state) => KistiSaveScreen(),),
-      // GoRoute(path: Routes.homework, name: Routes.homework, builder: (context, state) => HomeWorkScreen()),
+      GoRoute(path: Routes.project,name: Routes.project,builder: (context, state) => ProjectInfoScreen(),),
+      GoRoute(path: Routes.projectEntry, name: Routes.projectEntry, builder: (context, state) => ProjectEntryScreen()),
       // GoRoute(path: Routes.allhomework, name: Routes.allhomework, builder: (context, state) => ViewAllHomeworkScreen()),
       // GoRoute(path: Routes.hwByuser, name: Routes.hwByuser, builder: (context, state) => MyHomeworkListScreen()),
 

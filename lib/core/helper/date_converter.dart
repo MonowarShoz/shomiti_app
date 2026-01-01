@@ -14,9 +14,26 @@ class DateConverter {
     String date = DateFormat('dd-MMM-yyyy').format(dateTime!);
     return date;
   }
+
   static String dateFormatStyle3(DateTime? dateTime) {
     String date = DateFormat('yyyy-MM-dd').format(dateTime!);
     return date;
+  }
+
+  static int calculateDuration({String? startDate, String? endDate}) {
+    if (startDate == null || endDate == null) return 0;
+    try {
+      final start = DateTime.parse(startDate);
+      final end = DateTime.parse(endDate);
+      return end.difference(start).inDays;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  static String formatCurrency(num amount){
+    final formatter = NumberFormat.currency(symbol: '৳',decimalDigits: 0);
+    return formatter.format(amount);
   }
 
   static String apiDbDateFormatI(String date) {
@@ -25,7 +42,7 @@ class DateConverter {
     return DateFormat("dd-MMM-yyyy").format(dt);
   }
 
-//apiyyyyMMdd to dd-MMM-yyyy
+  //apiyyyyMMdd to dd-MMM-yyyy
   static String dateFormatFromAPi(String date) {
     DateFormat inputFormat = DateFormat("dd-MMM-yyyy");
     DateFormat outputFormat = DateFormat("yyyy-MM-dd");
@@ -50,7 +67,7 @@ class DateConverter {
     return outputFormat.format(inputDate);
   }
 
-//dd-MMM-yyyy to apiyyyyMMdd
+  //dd-MMM-yyyy to apiyyyyMMdd
   static String dateFromForAPi(String date) {
     DateFormat inputFormat = DateFormat("dd-MMM-yyyy");
     DateFormat outputFormat = DateFormat("yyyy-MM-dd");
@@ -90,9 +107,7 @@ class DateConverter {
     return time;
   }
 
-  static String localDateTowM(
-    DateTime? dateTime,
-  ) {
+  static String localDateTowM(DateTime? dateTime) {
     return DateFormat('MM-yyyy').format(dateTime!);
   }
 
