@@ -85,7 +85,7 @@ class SubmenuScreen extends ConsumerWidget {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(color: subMenuColor.withOpacity(0.2), shape: BoxShape.circle),
-                              child: Image.asset(headersubMenuIcon,height: 30,width: 30,),
+                              child: Image.asset(headersubMenuIcon, height: 30, width: 30),
                             ),
                             const SizedBox(height: 8),
                             Flexible(
@@ -173,6 +173,9 @@ class SubmenuScreen extends ConsumerWidget {
         break;
       case "Project":
         context.pushNamed(Routes.project);
+        break;
+      case "Member Assign":
+        context.pushNamed(Routes.memberAssign);
         break;
 
       default:

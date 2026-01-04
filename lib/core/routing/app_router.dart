@@ -5,7 +5,8 @@ import 'package:imsomitiapp/core/routing/routes.dart';
 import 'package:imsomitiapp/features/Home/presentation/widget/home_screen.dart';
 import 'package:imsomitiapp/features/Home/presentation/widget/submenu_screen.dart';
 import 'package:imsomitiapp/features/Member_info/presentation/widget/member_registration_form.dart';
-import 'package:imsomitiapp/features/Project_Info/presentation/widget/project_info_screen.dart';
+import 'package:imsomitiapp/features/Project_Info/presentation/widget/memberassigndir/member_assign_info.dart';
+import 'package:imsomitiapp/features/Project_Info/presentation/widget/project_add_directory/project_info_screen.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/kisti_info_screen.dart';
@@ -78,8 +79,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.kistiInfo,name: Routes.kistiInfo,builder: (context, state) => KistiInfoScreen(),),
       GoRoute(path: Routes.project,name: Routes.project,builder: (context, state) => ProjectInfoScreen(),),
       GoRoute(path: Routes.projectEntry, name: Routes.projectEntry, builder: (context, state) => ProjectEntryScreen()),
-      // GoRoute(path: Routes.allhomework, name: Routes.allhomework, builder: (context, state) => ViewAllHomeworkScreen()),
-      // GoRoute(path: Routes.hwByuser, name: Routes.hwByuser, builder: (context, state) => MyHomeworkListScreen()),
+       GoRoute(path: Routes.memberAssign, name: Routes.memberAssign, builder: (context, state) => MemberAssignInfoScreen()),
+       //GoRoute(path: Routes.memberAssignEntry, name: Routes.memberAssignEntry, builder: (context, state) => MembeAss()),
 
       // GoRoute(path: Routes.hwMap, name: Routes.hwMap, builder: (context, state) => HomeworkMapScreen()),
       // GoRoute(path: Routes.notice, name: Routes.notice, builder: (context, state) => NoticeListScreen()),

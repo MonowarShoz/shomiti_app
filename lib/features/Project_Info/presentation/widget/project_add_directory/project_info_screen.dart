@@ -5,8 +5,9 @@ import 'package:imsomitiapp/core/helper/extensions.dart';
 import 'package:imsomitiapp/features/Project_Info/data/datasource/remote/model/GetProjectModel.dart';
 import 'package:imsomitiapp/features/Project_Info/presentation/provider/project_info_notifier.dart';
 
-import '../../../../core/base_widget/error_state_widget.dart';
-import '../../../../core/routing/routes.dart';
+import '../../../../../core/base_widget/error_state_widget.dart';
+import '../../../../../core/routing/routes.dart';
+import '../info_row_widget.dart';
 
 class ProjectInfoScreen extends ConsumerWidget {
   const ProjectInfoScreen({super.key});
@@ -116,16 +117,16 @@ class ProjectCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                _InfoRow(icon: Icons.location_on_outlined, label: 'Location', value: project.proLocation ?? "", iconColor: Colors.red),
+                InfoRow(icon: Icons.location_on_outlined, label: 'Location', value: project.proLocation ?? "", iconColor: Colors.red),
                 const SizedBox(height: 12),
-                _InfoRow(
+                InfoRow(
                   icon: Icons.account_balance_wallet_outlined,
                   label: 'Budget',
                   value: DateConverter.formatCurrency(project.budget ?? 0),
                   iconColor: Colors.green,
                 ),
                 const SizedBox(height: 12),
-                _InfoRow(
+                InfoRow(
                   icon: Icons.person_outline,
                   label: 'Director',
                   value: project.givenName != null ? '${project.givenName} ${project.sureName ?? ''}' : 'Not Assigned',
@@ -210,39 +211,4 @@ class ProjectCard extends StatelessWidget {
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color iconColor;
 
-  const _InfoRow({required this.icon, required this.label, required this.value, required this.iconColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(color: iconColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-          child: Icon(icon, size: 18, color: iconColor),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}

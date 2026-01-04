@@ -15,8 +15,8 @@ class Routes {
   static const String kistiSave = '/kistiSave';
   static const String project = '/project';
   static const String projectEntry = '/projectEntry';
-  static const String hwMap = '/hwmap';
-   static const String notice = '/notice';
+  static const String memberAssign = '/memberAssign';
+   static const String memberAssignEntry = '/memberAssignentry';
   static const String chat = '/chat';
   static const String search = '/search';
   static const String appointment = '/appointments';

@@ -1,34 +1,32 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:imsomitiapp/core/base_widget/common_form_widget.dart';
-import 'package:imsomitiapp/core/helper/extensions.dart';
-import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/kistiInfo_notifier.dart';
-import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/kisty_save_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/base_widget/app_custom_dialog.dart';
-import '../../../Project_Info/presentation/provider/project_info_notifier.dart';
-import '../provider/crtype_notifier.dart';
+import '../../../../../core/base_widget/common_form_widget.dart';
+import '../../../../Member_info/presentation/provider/member_data_notifier.dart';
+import '../../provider/project_info_notifier.dart';
 
-class KistiSaveScreen extends ConsumerStatefulWidget {
+class MemberAssignProjectScreen extends ConsumerStatefulWidget {
   final BuildContext sheetContext;
-  const KistiSaveScreen( {super.key,required this.sheetContext,});
+  const MemberAssignProjectScreen( {super.key,required this.sheetContext,});
 
   @override
-  ConsumerState createState() => _KistiSaveScreenState();
+  ConsumerState createState() => _MemberAssignProjectScreenState();
 }
 
-class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
+class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectScreen> {
   final _formKey = GlobalKey<FormState>();
-  final typeNameController = TextEditingController();
+
   final amountController = TextEditingController();
   int? selectedCreditType;
   int? selectedProject;
 
   @override
   Widget build(BuildContext context) {
-    final creditState = ref.watch(creditNotifierProvider);
     final projectState = ref.watch(projectInfoNotifierProvider);
-    final kistiSavestate = ref.watch(kistiTypeSaveNotiferProvider);
+    final memberListState = ref.watch(memberDataNotifierProvider);
+
+
+    //final memberAssignSaveState = ref.watch(kistiTypeSaveNotiferProvider);
     return Container(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40),
       decoration: BoxDecoration(
@@ -53,16 +51,16 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Add Kisti Type',
+                  'Assign Member to Project',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                 ),
                 const SizedBox(height: 24),
-                FormWidgets.buildLabel('Type Name'),
+                FormWidgets.buildLabel('Enter Payable Amount'),
                 const SizedBox(height: 8),
                 TextFormField(
-                  controller: typeNameController,
+                  controller: amountController,
                   decoration: InputDecoration(
-                    hintText: 'Enter type name',
+                    hintText: 'Enter amount',
                     hintStyle: TextStyle(color: Colors.grey[400]),
                     filled: true,
                     fillColor: Colors.grey[50],
@@ -78,85 +76,15 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Amount Field
-                FormWidgets.buildLabel('Amount'),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: 'Enter amount',
-                    hintStyle: TextStyle(color: Colors.grey[400]),
-                    prefixText: '৳ ',
-                    prefixStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
-                    filled: true,
-                    fillColor: Colors.grey[50],
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                    contentPadding: const EdgeInsets.all(16),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter amount';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter valid amount';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                FormWidgets.buildLabel('Credit Type'),
-                const SizedBox(height: 8),
-                creditState.when(
-                  data: (creditList) {
-                    return DropdownButtonFormField<int>(
-                      initialValue: selectedCreditType,
-                      hint: Text(
-                        'Select credit type',
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                        contentPadding: const EdgeInsets.all(16),
-                      ),
-                      items: creditList.map((credit) => DropdownMenuItem(value: credit.id, child: Text(credit.crname ?? ""))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCreditType = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select credit type';
-                        }
-                        return null;
-                      },
-                    );
-                  },
-                  error: (error, stackTrace) {
-                    return FormWidgets.dropdownErrorWidget(
-                      errorTitle: 'Failed To load Credit',
-                      callback: () {
-                        ref.invalidate(creditNotifierProvider);
-                      },
-                    );
-                  },
-                  loading: () {
-                    return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Credit');
-                  },
-                ),
-                const SizedBox(height: 20),
 
-                // Project Type Dropdown
-                FormWidgets.buildLabel('Project'),
+                FormWidgets.buildLabel('Project Type'),
+                const SizedBox(height: 8),
                 projectState.when(
                   data: (projectList) {
                     return DropdownButtonFormField<int>(
-                      initialValue: selectedProject,
+                      initialValue: selectedCreditType,
                       hint: Text(
-                        'Select Project',
+                        'Select Project type',
                         style: TextStyle(color: Colors.grey[400]),
                       ),
                       decoration: InputDecoration(
@@ -168,7 +96,7 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                       items: projectList.map((project) => DropdownMenuItem(value: project.id, child: Text(project.projectName ?? ""))).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedProject = value;
+                          selectedCreditType = value;
                         });
                       },
                       validator: (value) {
@@ -181,7 +109,51 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                   },
                   error: (error, stackTrace) {
                     return FormWidgets.dropdownErrorWidget(
-                      errorTitle: 'Failed To load Project',
+                      errorTitle: 'Failed To load Project Type',
+                      callback: () {
+                        //ref.invalidate(creditNotifierProvider);
+                      },
+                    );
+                  },
+                  loading: () {
+                    return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Projects Type list');
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // Project Type Dropdown
+                FormWidgets.buildLabel('Select Member'),
+                memberListState.when(
+                  data: (memberList) {
+                    return DropdownButtonFormField<int>(
+                      initialValue: selectedProject,
+                      hint: Text(
+                        'Select Member',
+                        style: TextStyle(color: Colors.grey[400]),
+                      ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      items: memberList.map((member) => DropdownMenuItem(value: member.memNo, child: Text(member.givenName ?? ""))).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedProject = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select Member';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                  error: (error, stackTrace) {
+                    return FormWidgets.dropdownErrorWidget(
+                      errorTitle: 'Failed To load Member',
                       callback: () {
                         ref.invalidate(projectInfoNotifierProvider);
                       },
@@ -195,42 +167,42 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:kistiSavestate.isLoading ? null : () async{
-                      if (_formKey.currentState?.validate() ?? false) {
-                        if(selectedProject != null && selectedCreditType != null){
-                        await  ref
-                              .read(kistiTypeSaveNotiferProvider.notifier)
-                              .saveKistyType(
-                            typeName: typeNameController.text,
-                            amount: int.parse(amountController.text),
-                            projectId: selectedProject!,
-                            creditId: selectedCreditType!,
-                          );
-                        final result = ref.read(kistiTypeSaveNotiferProvider);
-                        if(result.hasValue && result.value != null){
-
-                          ref.invalidate(kistiInfoNotifierProvider);
-
-
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
-                            context.pop();
-                          }
-                        }else{
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            context.pop();
-                          }
-                        }
-
-                        }else{
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            context.pop();
-                          }
-                        }
-
-                      }
+                    onPressed: () async{
+                      // if (_formKey.currentState?.validate() ?? false) {
+                      //   if(selectedProject != null && selectedCreditType != null){
+                      //     await  ref
+                      //         .read(kistiTypeSaveNotiferProvider.notifier)
+                      //         .saveKistyType(
+                      //       typeName: typeNameController.text,
+                      //       amount: int.parse(amountController.text),
+                      //       projectId: selectedProject!,
+                      //       creditId: selectedCreditType!,
+                      //     );
+                      //     final result = ref.read(kistiTypeSaveNotiferProvider);
+                      //     if(result.hasValue && result.value != null){
+                      //
+                      //       ref.invalidate(kistiInfoNotifierProvider);
+                      //
+                      //
+                      //       if (context.mounted) {
+                      //         AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
+                      //         context.pop();
+                      //       }
+                      //     }else{
+                      //       if (context.mounted) {
+                      //         AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
+                      //         context.pop();
+                      //       }
+                      //     }
+                      //
+                      //   }else{
+                      //     if (context.mounted) {
+                      //       AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
+                      //       context.pop();
+                      //     }
+                      //   }
+                      //
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -239,7 +211,7 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 0,
                     ),
-                    child:kistiSavestate.isLoading ? CircularProgressIndicator(): const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -250,11 +222,4 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
       ),
     );
   }
-
-
-
-
-
-
-
 }
