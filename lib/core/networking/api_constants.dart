@@ -44,6 +44,12 @@ class ApiConstants {
   static const String saveassignproject = "/api/ProjectCtrl/save-assign-project";
   static const String getassign = "/api/ProjectCtrl/getassign";
 
+
+  //Accounts
+  static const String getBalanceWithdraw = "/api/AccountCtrl/get-Balance-withdraw";
+  static const String saveBalanceWithdraw = "/api/AccountCtrl/save-withdraw";
+  static const String saveBalanceSegment = "/api/AccountCtrl/savebalancesegment";
+
  
 
   
