@@ -129,7 +129,7 @@ class ProjectInfoRepoImpl implements ProjectRepository {
   }
 
   @override
-  Future<ApiResult<String?>> saveMemberAssignToProject({required int projectId, required int memNo, required int amount}) async {
+  Future<ApiResult<String?>> saveMemberAssignToProject({required int id,required int projectId, required int memNo, required int amount}) async {
     try {
       final token = await localDataSource.getToken();
       final userData = await localDataSource.getUserInformation();

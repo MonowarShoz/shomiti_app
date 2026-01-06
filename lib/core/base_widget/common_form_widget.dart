@@ -65,4 +65,16 @@ class FormWidgets {
       ],
     );
   }
+  static Widget filledDropdownWidget({required String fieldValue,}) {
+
+      return  DropdownButtonFormField<String>(
+          initialValue: fieldValue,
+          decoration: decoration(errorText: null),
+          items: const [],
+          onChanged: null,
+          hint: const Text('Unable to load'),
+        );
+
+
+  }
 }
