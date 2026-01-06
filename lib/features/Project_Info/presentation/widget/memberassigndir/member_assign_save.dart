@@ -19,6 +19,12 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
   final amountController = TextEditingController();
   int? selectedCreditType;
   int? selectedProject;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    amountController.text = "1333";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +217,7 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 0,
                     ),
-                    child: const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: const Text('Save Assignment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -221,5 +227,11 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
         ),
       ),
     );
+  }
+
+  submitAssignment(){
+    if(_formKey.currentState?.validate() ?? false){
+
+    }
   }
 }
