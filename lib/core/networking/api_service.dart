@@ -14,6 +14,9 @@ import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/Model/
 import 'package:retrofit/retrofit.dart';
 import 'package:imsomitiapp/core/networking/api_constants.dart';
 
+import '../../features/Accounts/data/datasource/remote/Model/balance_segment_save_model.dart';
+import '../../features/Accounts/data/datasource/remote/Model/get_bal_withdraw_model.dart';
+import '../../features/Accounts/data/datasource/remote/Model/save_withdraw_model.dart';
 import '../../features/Project_Info/data/datasource/remote/model/member_assign_model.dart';
 import '../../features/kistiAndSubscription/data/datasource/Model/KistyTypeInfo.dart';
 import '../../features/kistiAndSubscription/data/datasource/Model/get_subscription_type_model.dart';
@@ -68,4 +71,13 @@ abstract class ApiService {
 
   @GET(ApiConstants.getassign)
   Future<List<MemberAssigninfoModel>> getMemberAssign(@Header("Authorization") String token, @Query("compId") int companyId);
+
+  //Accounts
+  @GET(ApiConstants.getBalanceWithdraw)
+  Future<List<GetBalanceWithdrawModel>> getBalanceWithdraw(@Header("Authorization") String token, @Query("compId") int companyId);
+  @POST(ApiConstants.saveBalanceSegment)
+  Future<String> saveBalance(@Header("Authorization") String token, @Body() BalanceSegmentSaveModel balanceSegmentSaveBody);
+  @POST(ApiConstants.saveBalanceWithdraw)
+  Future<String> saveWithdraw(@Header("Authorization") String token, @Body() SaveWithDrawModel saveWithdrawBody);
+
 }
