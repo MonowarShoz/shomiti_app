@@ -35,7 +35,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (shContext) => MemberAssignProjectScreen(sheetContext: shContext,),
+                  builder: (shContext) => MemberAssignProjectScreen(sheetContext: shContext, isEditMode: false,),
                 );
               },
               icon: Container(
@@ -59,7 +59,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final memberAssign = data[index];
-              return _buildMemberAssignTile(memberAssign);
+              return _buildMemberAssignTile(memberAssign, context);
             },
           );
         },
@@ -73,7 +73,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMemberAssignTile(MemberAssigninfoModel memberAssignModel) {
+  Widget _buildMemberAssignTile(MemberAssigninfoModel memberAssignModel, BuildContext ctx) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -104,14 +104,21 @@ class MemberAssignInfoScreen extends ConsumerWidget {
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
                   ),
                 ),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                //   decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(20)),
-                //   child: Text(
-                //     'Active',
-                //     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.green[700]),
-                //   ),
-                // ),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (shContext) => MemberAssignProjectScreen(sheetContext: shContext, editData: memberAssignModel, isEditMode: true),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(20)),
+                    child: Icon(Icons.edit),
+                  ),
+                ),
               ],
             ),
           ),
@@ -131,7 +138,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
                 InfoRow(
                   icon: Icons.person_outline,
                   label: 'Assigned By',
-                  value: memberAssignModel.assignBy != null ? '${memberAssignModel.assignBy }' : 'Not Assigned',
+                  value: memberAssignModel.assignBy != null ? '${memberAssignModel.assignBy}' : 'Not Assigned',
                   iconColor: Colors.purple,
                 ),
                 const SizedBox(height: 16),
