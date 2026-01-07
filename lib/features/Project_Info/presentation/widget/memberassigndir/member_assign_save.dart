@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../core/base_widget/common_form_widget.dart';
+import '../../../../Member_info/data/data_source/remote/model/member_info_all_model.dart';
 import '../../../../Member_info/presentation/provider/member_data_notifier.dart';
+import '../../../data/datasource/remote/model/GetProjectModel.dart';
+import '../../../data/datasource/remote/model/get_member_assign_model.dart';
 import '../../provider/project_info_notifier.dart';
+import '../../provider/save_member_project_notifier.dart';
 
 class MemberAssignProjectScreen extends ConsumerStatefulWidget {
   final BuildContext sheetContext;
-  const MemberAssignProjectScreen( {super.key,required this.sheetContext,});
+  final MemberAssigninfoModel? editData;
+  final bool isEditMode;
+
+  const MemberAssignProjectScreen({super.key, required this.sheetContext, this.editData,required this.isEditMode});
 
   @override
   ConsumerState createState() => _MemberAssignProjectScreenState();
@@ -17,16 +24,37 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
   final _formKey = GlobalKey<FormState>();
 
   final amountController = TextEditingController();
-  int? selectedCreditType;
-  int? selectedProject;
+  int? selectedMemberID;
+  int? selectedProjectID;
+  int? id;
+  String? projectName ;
+  String? memberName ;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editData != null) {
+      id = widget.editData!.id;
+      selectedMemberID = widget.editData!.memNo;
+      selectedProjectID = widget.editData!.projectid;
+      amountController.text = widget.editData!.amount.toString();
+      projectName = widget.editData!.projectname;
+      memberName = widget.editData!.givenName;
+    } else {
+      id = null;
+      selectedMemberID = null;
+      selectedProjectID = null;
+      amountController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final projectState = ref.watch(projectInfoNotifierProvider);
-    final memberListState = ref.watch(memberDataNotifierProvider);
+    print('edit mode ${widget.isEditMode}');
+    final memberAssignSaveState = ref.watch(memberAssignToProjectNotifierProvider);
 
-
-    //final memberAssignSaveState = ref.watch(kistiTypeSaveNotiferProvider);
     return Container(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40),
       decoration: BoxDecoration(
@@ -76,134 +104,58 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
                 ),
                 const SizedBox(height: 20),
 
-
-                FormWidgets.buildLabel('Project Type'),
+                FormWidgets.buildLabel('Project Name'),
                 const SizedBox(height: 8),
-                projectState.when(
-                  data: (projectList) {
-                    return DropdownButtonFormField<int>(
-                      initialValue: selectedCreditType,
-                      hint: Text(
-                        'Select Project type',
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                        contentPadding: const EdgeInsets.all(16),
-                      ),
-                      items: projectList.map((project) => DropdownMenuItem(value: project.id, child: Text(project.projectName ?? ""))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCreditType = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select Project type';
-                        }
-                        return null;
-                      },
-                    );
-                  },
-                  error: (error, stackTrace) {
-                    return FormWidgets.dropdownErrorWidget(
-                      errorTitle: 'Failed To load Project Type',
-                      callback: () {
-                        //ref.invalidate(creditNotifierProvider);
-                      },
-                    );
-                  },
-                  loading: () {
-                    return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Projects Type list');
-                  },
-                ),
+                buildProjectDropdownWidget(),
                 const SizedBox(height: 20),
 
                 // Project Type Dropdown
                 FormWidgets.buildLabel('Select Member'),
-                memberListState.when(
-                  data: (memberList) {
-                    return DropdownButtonFormField<int>(
-                      initialValue: selectedProject,
-                      hint: Text(
-                        'Select Member',
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                        contentPadding: const EdgeInsets.all(16),
-                      ),
-                      items: memberList.map((member) => DropdownMenuItem(value: member.memNo, child: Text(member.givenName ?? ""))).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedProject = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select Member';
-                        }
-                        return null;
-                      },
-                    );
-                  },
-                  error: (error, stackTrace) {
-                    return FormWidgets.dropdownErrorWidget(
-                      errorTitle: 'Failed To load Member',
-                      callback: () {
-                        ref.invalidate(projectInfoNotifierProvider);
-                      },
-                    );
-                  },
-                  loading: () {
-                    return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Project...');
-                  },
-                ),
+                buildMemberDropdownWidget(),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async{
-                      // if (_formKey.currentState?.validate() ?? false) {
-                      //   if(selectedProject != null && selectedCreditType != null){
-                      //     await  ref
-                      //         .read(kistiTypeSaveNotiferProvider.notifier)
-                      //         .saveKistyType(
-                      //       typeName: typeNameController.text,
-                      //       amount: int.parse(amountController.text),
-                      //       projectId: selectedProject!,
-                      //       creditId: selectedCreditType!,
-                      //     );
-                      //     final result = ref.read(kistiTypeSaveNotiferProvider);
-                      //     if(result.hasValue && result.value != null){
-                      //
-                      //       ref.invalidate(kistiInfoNotifierProvider);
-                      //
-                      //
-                      //       if (context.mounted) {
-                      //         AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
-                      //         context.pop();
-                      //       }
-                      //     }else{
-                      //       if (context.mounted) {
-                      //         AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                      //         context.pop();
-                      //       }
-                      //     }
-                      //
-                      //   }else{
-                      //     if (context.mounted) {
-                      //       AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                      //       context.pop();
-                      //     }
-                      //   }
-                      //
-                      // }
-                    },
+                    onPressed: memberAssignSaveState.isLoading
+                        ? null
+                        : () async {
+                            submitMemberAssignToProject(ref, isEdit: widget.isEditMode);
+                            // if (_formKey.currentState?.validate() ?? false) {
+                            //   if(selectedProject != null && selectedCreditType != null){
+                            //     await  ref
+                            //         .read(kistiTypeSaveNotiferProvider.notifier)
+                            //         .saveKistyType(
+                            //       typeName: typeNameController.text,
+                            //       amount: int.parse(amountController.text),
+                            //       projectId: selectedProject!,
+                            //       creditId: selectedCreditType!,
+                            //     );
+                            //     final result = ref.read(kistiTypeSaveNotiferProvider);
+                            //     if(result.hasValue && result.value != null){
+                            //
+                            //       ref.invalidate(kistiInfoNotifierProvider);
+                            //
+                            //
+                            //       if (context.mounted) {
+                            //         AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
+                            //         context.pop();
+                            //       }
+                            //     }else{
+                            //       if (context.mounted) {
+                            //         AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
+                            //         context.pop();
+                            //       }
+                            //     }
+                            //
+                            //   }else{
+                            //     if (context.mounted) {
+                            //       AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
+                            //       context.pop();
+                            //     }
+                            //   }
+                            //
+                            // }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
@@ -211,7 +163,9 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 0,
                     ),
-                    child: const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: memberAssignSaveState.isLoading
+                        ? Center(child: CircularProgressIndicator())
+                        : const Text('Add Member Assign', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -221,5 +175,114 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
         ),
       ),
     );
+  }
+
+  buildProjectDropdownWidget() {
+    if (widget.isEditMode) {
+      return FormWidgets.filledDropdownWidget(fieldValue: projectName ?? '');
+    } else {
+      final projectState = ref.watch(projectInfoNotifierProvider);
+      return projectState.when(
+        data: (projectList) {
+          return DropdownButtonFormField<int>(
+            initialValue: selectedProjectID,
+            hint: Text('Select Project type', style: TextStyle(color: Colors.grey[400])),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey[50],
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              contentPadding: const EdgeInsets.all(16),
+            ),
+            items: projectList.map((project) => DropdownMenuItem(value: project.id, child: Text(project.projectName ?? ""))).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedProjectID = value;
+              });
+            },
+            validator: (value) {
+              if (value == null) {
+                return 'Please select Project type';
+              }
+              return null;
+            },
+          );
+        },
+        error: (error, stackTrace) {
+          return FormWidgets.dropdownErrorWidget(
+            errorTitle: 'Failed To load Project Type',
+            callback: () {
+              //ref.invalidate(creditNotifierProvider);
+            },
+          );
+        },
+        loading: () {
+          return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Projects Type list');
+        },
+      );
+    }
+  }
+
+  buildMemberDropdownWidget() {
+    if (widget.isEditMode) {
+      return FormWidgets.filledDropdownWidget(fieldValue:memberName ?? '' );
+    } else {
+      final memberListState = ref.watch(memberDataNotifierProvider);
+     return memberListState.when(
+        data: (memberList) {
+          return DropdownButtonFormField<int>(
+            initialValue: selectedMemberID,
+            hint: Text('Select Member', style: TextStyle(color: Colors.grey[400])),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey[50],
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              contentPadding: const EdgeInsets.all(16),
+            ),
+            items: memberList.map((member) => DropdownMenuItem(value: member.memNo, child: Text(member.givenName ?? ""))).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedMemberID = value;
+              });
+            },
+            validator: (value) {
+              if (value == null) {
+                return 'Please select Member';
+              }
+              return null;
+            },
+          );
+        },
+        error: (error, stackTrace) {
+          return FormWidgets.dropdownErrorWidget(
+            errorTitle: 'Failed To load Member',
+            callback: () {
+              ref.invalidate(projectInfoNotifierProvider);
+            },
+          );
+        },
+        loading: () {
+          return FormWidgets.dropdownLoadingWidget(loadingTitle: 'Loading Project...');
+        },
+      );
+    }
+  }
+
+  submitMemberAssignToProject(WidgetRef ref, {required bool isEdit}) {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (isEdit) {
+        ref
+            .read(memberAssignToProjectNotifierProvider.notifier)
+            .assignMemberToProject(
+              id: widget.editData!.id!,
+              projectId: widget.editData!.projectid!,
+              memNo: widget.editData!.memNo!,
+              amount: int.parse(amountController.text),
+            );
+      } else {
+        ref
+            .read(memberAssignToProjectNotifierProvider.notifier)
+            .assignMemberToProject(id: 0, projectId: selectedProjectID!, memNo: selectedMemberID!, amount: int.parse(amountController.text));
+      }
+    }
   }
 }
