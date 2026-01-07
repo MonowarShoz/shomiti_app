@@ -59,7 +59,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final memberAssign = data[index];
-              return _buildMemberAssignTile(memberAssign,context);
+              return _buildMemberAssignTile(memberAssign);
             },
           );
         },
@@ -73,7 +73,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMemberAssignTile(MemberAssigninfoModel memberAssignModel,BuildContext ctx) {
+  Widget _buildMemberAssignTile(MemberAssigninfoModel memberAssignModel) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -104,21 +104,7 @@ class MemberAssignInfoScreen extends ConsumerWidget {
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: ctx,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (shContext) => MemberAssignProjectScreen(sheetContext: shContext,),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(20)),
-                    child: Icon(Icons.edit),
-                  ),
-                ),
+
               ],
             ),
           ),
