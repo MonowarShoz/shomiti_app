@@ -4,6 +4,7 @@ import 'package:imsomitiapp/core/base/remote_data_source.dart';
 import 'package:imsomitiapp/core/networking/api_result.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/Model/CrtypeModel.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/Model/KistyTypeInfo.dart';
+import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/Model/get_subscription_type_model.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/Model/kistiInfoSaveModel.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/data/datasource/kisty_subs_remote_src.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/domain/repository/kisty_repository.dart';
@@ -81,7 +82,7 @@ class KistyRepoImpl  implements KistyRepository {
   }
 
   @override
-  Future<ApiResult<String?>> saveKistyType({required String typeName, required int amount, required int crTypeId, required int projectId}) async{
+  Future<ApiResult<String?>> saveKistyType({required int id,required String typeName, required int amount, required int crTypeId, required int projectId}) async{
 
     try{
       final token = await localDataSource.getToken();
@@ -94,7 +95,7 @@ class KistyRepoImpl  implements KistyRepository {
       }
       final Map userJson = jsonDecode(userData!);
       final result = await kistyRemoteSrc.saveKistyType(token: 'Bearer $token', kistiTypeBody: KistiSaveModel(
-        id: 0,
+        id: id,
         typeName: typeName,
         amount: amount,
         compId: userJson['cid'],
@@ -127,6 +128,18 @@ class KistyRepoImpl  implements KistyRepository {
     }catch(e){
       return ApiResult.failure(ApiErrorHandler.handle(e));
     }
+  }
+
+  @override
+  Future<ApiResult<String?>> addSubsctiptionType({required int id, required int crTypeId, required String typeName, required int projectId, required int amount}) {
+    // TODO: implement addSubsctiptionType
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<List<GetSubscriptionTypeModel>?>> getSubsctipTypeData() {
+    // TODO: implement getSubsctipTypeData
+    throw UnimplementedError();
   }
   
   

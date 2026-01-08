@@ -16,26 +16,15 @@ class KistySaveNotifier extends AsyncNotifier<String?> {
     return null;
   }
 
-  Future<void> saveKistyType({
-   required String typeName,
-    required int amount,
-    required int projectId,
-    required int creditId
-  }) async {
+  Future<void> saveKistyType({required int id, required String typeName, required int amount, required int projectId, required int creditId}) async {
     state = const AsyncLoading();
-    final result = await kistySaveUsecase.call(
-
-      typeName: typeName,
-      amount: amount,
-      projectId: projectId,
-      crTypeId: creditId
-    );
+    final result = await kistySaveUsecase.call(id: id, typeName: typeName, amount: amount, projectId: projectId, crTypeId: creditId);
     result.when(
       success: (data) {
         if (data != null) {
-         state = AsyncData(data);
+          state = AsyncData(data);
         } else {
-          state= AsyncError(ApiErrorHandler.handle("No Content"), StackTrace.current);
+          state = AsyncError(ApiErrorHandler.handle("No Content"), StackTrace.current);
         }
       },
       failure: (errorHandler) {

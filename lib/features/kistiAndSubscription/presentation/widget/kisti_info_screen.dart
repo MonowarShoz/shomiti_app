@@ -34,7 +34,7 @@ class KistiInfoScreen extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (shContext) => KistiSaveScreen(sheetContext: shContext,),
+                  builder: (shContext) => KistiSaveScreen(sheetContext: shContext,isEditMode: false,),
                 );
               },
               icon: Container(
@@ -58,7 +58,7 @@ class KistiInfoScreen extends ConsumerWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final kisti = data[index];
-              return _buildKistiItem(kisti);
+              return _buildKistiItem(kisti,context);
             },
           );
         },
@@ -72,7 +72,7 @@ class KistiInfoScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildKistiItem(KistyTypeInfo kisti) {
+  Widget _buildKistiItem(KistyTypeInfo kisti,BuildContext ctx) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
@@ -92,6 +92,21 @@ class KistiInfoScreen extends ConsumerWidget {
               Text(
                 kisti.crname ?? '0',
                 style: TextStyle(fontSize: 13, color: kisti.crname == 'Debit' ? Colors.red[400] : Colors.green[400], fontWeight: FontWeight.w500),
+              ),
+              InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: ctx,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (shContext) => KistiSaveScreen(sheetContext: shContext, editData: kisti, isEditMode: true),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(20)),
+                  child: Icon(Icons.edit),
+                ),
               ),
             ],
           ),

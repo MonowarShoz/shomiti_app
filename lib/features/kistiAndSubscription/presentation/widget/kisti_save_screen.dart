@@ -7,11 +7,15 @@ import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/
 
 import '../../../../core/base_widget/app_custom_dialog.dart';
 import '../../../Project_Info/presentation/provider/project_info_notifier.dart';
+import '../../data/datasource/Model/KistyTypeInfo.dart';
 import '../provider/crtype_notifier.dart';
 
 class KistiSaveScreen extends ConsumerStatefulWidget {
+  final KistyTypeInfo? editData;
   final BuildContext sheetContext;
-  const KistiSaveScreen( {super.key,required this.sheetContext,});
+  final bool isEditMode;
+
+  const KistiSaveScreen({super.key, required this.sheetContext, this.editData, required this.isEditMode});
 
   @override
   ConsumerState createState() => _KistiSaveScreenState();
@@ -23,6 +27,24 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
   final amountController = TextEditingController();
   int? selectedCreditType;
   int? selectedProject;
+  int? id;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editData != null) {
+      id = widget.editData!.id;
+      selectedCreditType = widget.editData!.crid;
+      selectedProject = widget.editData!.projectid;
+      typeNameController.text = widget.editData!.typeName!;
+      amountController.text = widget.editData!.amount.toString();
+    } else {
+      amountController.clear();
+      id = 0;
+      selectedProject = null;
+      selectedCreditType = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +131,14 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 const SizedBox(height: 8),
                 creditState.when(
                   data: (creditList) {
+                    final validInitialValue = creditList.any(
+                          (p) => p.id == selectedCreditType,
+                    )
+                        ? selectedCreditType
+                        : null;
                     return DropdownButtonFormField<int>(
-                      initialValue: selectedCreditType,
-                      hint: Text(
-                        'Select credit type',
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
+                      initialValue: validInitialValue,
+                      hint: Text('Select credit type', style: TextStyle(color: Colors.grey[400])),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey[50],
@@ -153,19 +177,21 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 FormWidgets.buildLabel('Project'),
                 projectState.when(
                   data: (projectList) {
+                    final validInitialValue = projectList.any(
+                          (p) => p.projectId == selectedProject,
+                    )
+                        ? selectedProject
+                        : null;
                     return DropdownButtonFormField<int>(
-                      initialValue: selectedProject,
-                      hint: Text(
-                        'Select Project',
-                        style: TextStyle(color: Colors.grey[400]),
-                      ),
+                      initialValue: validInitialValue,
+                      hint: Text('Select Project', style: TextStyle(color: Colors.grey[400])),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey[50],
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                         contentPadding: const EdgeInsets.all(16),
                       ),
-                      items: projectList.map((project) => DropdownMenuItem(value: project.id, child: Text(project.projectName ?? ""))).toList(),
+                      items: projectList.map((project) => DropdownMenuItem(value: project.projectId, child: Text(project.projectName ?? ""))).toList(),
                       onChanged: (value) {
                         setState(() {
                           selectedProject = value;
@@ -195,43 +221,11 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:kistiSavestate.isLoading ? null : () async{
-                      if (_formKey.currentState?.validate() ?? false) {
-                        if(selectedProject != null && selectedCreditType != null){
-                        await  ref
-                              .read(kistiTypeSaveNotiferProvider.notifier)
-                              .saveKistyType(
-                            typeName: typeNameController.text,
-                            amount: int.parse(amountController.text),
-                            projectId: selectedProject!,
-                            creditId: selectedCreditType!,
-                          );
-                        final result = ref.read(kistiTypeSaveNotiferProvider);
-                        if(result.hasValue && result.value != null){
-
-                          ref.invalidate(kistiInfoNotifierProvider);
-
-
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
-                            context.pop();
-                          }
-                        }else{
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            context.pop();
-                          }
-                        }
-
-                        }else{
-                          if (context.mounted) {
-                            AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            context.pop();
-                          }
-                        }
-
-                      }
-                    },
+                    onPressed: kistiSavestate.isLoading
+                        ? null
+                        : () async {
+                            await submitAddKistyType(ref);
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
@@ -239,7 +233,11 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 0,
                     ),
-                    child:kistiSavestate.isLoading ? CircularProgressIndicator(): const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: kistiSavestate.isLoading
+                        ? CircularProgressIndicator()
+                        : widget.isEditMode
+                        ? const Text('Edit Kisti Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+                        : const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -251,10 +249,64 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
     );
   }
 
+  Future<void> submitAddKistyType(WidgetRef ref) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (selectedProject != null && selectedCreditType != null) {
+        if (widget.isEditMode) {
+          await ref
+              .read(kistiTypeSaveNotiferProvider.notifier)
+              .saveKistyType(
+                id: id!,
+                typeName: typeNameController.text,
+                amount: int.parse(amountController.text),
+                projectId: selectedProject!,
+                creditId: selectedCreditType!,
+              );
+          final result = ref.read(kistiTypeSaveNotiferProvider);
+          if (result.hasValue && result.value != null) {
+            ref.invalidate(kistiInfoNotifierProvider);
 
+            if (mounted) {
+              AppSnackBar.show(context, message: 'Successfully Kisty Type Edited', backgroundColor: Colors.green);
+              context.pop();
+            }
+          } else {
+            if (mounted) {
+              AppSnackBar.show(context, message: 'Something went wrong', backgroundColor: Colors.red);
+              context.pop();
+            }
+          }
+        } else {
+          await ref
+              .read(kistiTypeSaveNotiferProvider.notifier)
+              .saveKistyType(
+                id: 0,
+                typeName: typeNameController.text,
+                amount: int.parse(amountController.text),
+                projectId: selectedProject!,
+                creditId: selectedCreditType!,
+              );
+          final result = ref.read(kistiTypeSaveNotiferProvider);
+          if (result.hasValue && result.value != null) {
+            ref.invalidate(kistiInfoNotifierProvider);
 
-
-
-
-
+            if (mounted) {
+              AppSnackBar.show(context, message: 'Successfully Kisty Type added', backgroundColor: Colors.green);
+              context.pop();
+            }
+          } else {
+            if (mounted) {
+              AppSnackBar.show(context, message: 'Something went wrong', backgroundColor: Colors.red);
+              context.pop();
+            }
+          }
+        }
+      } else {
+        if (context.mounted) {
+          AppSnackBar.show(context, message: 'Please select project ID and credit Type went wrong', backgroundColor: Colors.red);
+          context.pop();
+        }
+      }
+    }
+  }
 }
