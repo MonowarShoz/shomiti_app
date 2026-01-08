@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../core/base_widget/app_custom_dialog.dart' show AppSnackBar;
 import '../../../../../core/base_widget/common_form_widget.dart';
 import '../../../../Member_info/data/data_source/remote/model/member_info_all_model.dart';
 import '../../../../Member_info/presentation/provider/member_data_notifier.dart';
 import '../../../data/datasource/remote/model/GetProjectModel.dart';
 import '../../../data/datasource/remote/model/get_member_assign_model.dart';
+import '../../provider/member_assign_notifier.dart';
 import '../../provider/project_info_notifier.dart';
 import '../../provider/save_member_project_notifier.dart';
 
@@ -14,7 +17,7 @@ class MemberAssignProjectScreen extends ConsumerStatefulWidget {
   final MemberAssigninfoModel? editData;
   final bool isEditMode;
 
-  const MemberAssignProjectScreen({super.key, required this.sheetContext, this.editData,required this.isEditMode});
+  const MemberAssignProjectScreen({super.key, required this.sheetContext, this.editData, required this.isEditMode});
 
   @override
   ConsumerState createState() => _MemberAssignProjectScreenState();
@@ -27,10 +30,9 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
   int? selectedMemberID;
   int? selectedProjectID;
   int? id;
-  String? projectName ;
-  String? memberName ;
+  String? projectName;
 
-
+  String? memberName;
 
   @override
   void initState() {
@@ -119,42 +121,8 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
                     onPressed: memberAssignSaveState.isLoading
                         ? null
                         : () async {
-                            submitMemberAssignToProject(ref, isEdit: widget.isEditMode);
-                            // if (_formKey.currentState?.validate() ?? false) {
-                            //   if(selectedProject != null && selectedCreditType != null){
-                            //     await  ref
-                            //         .read(kistiTypeSaveNotiferProvider.notifier)
-                            //         .saveKistyType(
-                            //       typeName: typeNameController.text,
-                            //       amount: int.parse(amountController.text),
-                            //       projectId: selectedProject!,
-                            //       creditId: selectedCreditType!,
-                            //     );
-                            //     final result = ref.read(kistiTypeSaveNotiferProvider);
-                            //     if(result.hasValue && result.value != null){
-                            //
-                            //       ref.invalidate(kistiInfoNotifierProvider);
-                            //
-                            //
-                            //       if (context.mounted) {
-                            //         AppSnackBar.show(context, message: 'Successfully Kisty Type added',backgroundColor: Colors.green);
-                            //         context.pop();
-                            //       }
-                            //     }else{
-                            //       if (context.mounted) {
-                            //         AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            //         context.pop();
-                            //       }
-                            //     }
-                            //
-                            //   }else{
-                            //     if (context.mounted) {
-                            //       AppSnackBar.show(context, message: 'Something went wrong',backgroundColor: Colors.red);
-                            //       context.pop();
-                            //     }
-                            //   }
-                            //
-                            // }
+                           await submitMemberAssignToProject(ref, isEdit: widget.isEditMode);
+
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -224,10 +192,10 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
 
   buildMemberDropdownWidget() {
     if (widget.isEditMode) {
-      return FormWidgets.filledDropdownWidget(fieldValue:memberName ?? '' );
+      return FormWidgets.filledDropdownWidget(fieldValue: memberName ?? '');
     } else {
       final memberListState = ref.watch(memberDataNotifierProvider);
-     return memberListState.when(
+      return memberListState.when(
         data: (memberList) {
           return DropdownButtonFormField<int>(
             initialValue: selectedMemberID,
@@ -256,7 +224,7 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
           return FormWidgets.dropdownErrorWidget(
             errorTitle: 'Failed To load Member',
             callback: () {
-              ref.invalidate(projectInfoNotifierProvider);
+              ref.invalidate(memberAssignToProjectNotifierProvider);
             },
           );
         },
@@ -267,10 +235,10 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
     }
   }
 
-  submitMemberAssignToProject(WidgetRef ref, {required bool isEdit}) {
+Future<void>  submitMemberAssignToProject(WidgetRef ref, {required bool isEdit}) async{
     if (_formKey.currentState?.validate() ?? false) {
       if (isEdit) {
-        ref
+      await  ref
             .read(memberAssignToProjectNotifierProvider.notifier)
             .assignMemberToProject(
               id: widget.editData!.id!,
@@ -278,10 +246,45 @@ class _MemberAssignProjectScreenState extends ConsumerState<MemberAssignProjectS
               memNo: widget.editData!.memNo!,
               amount: int.parse(amountController.text),
             );
+        final result = ref.read(memberAssignToProjectNotifierProvider);
+        if (result.hasValue && result.value != null) {
+          ref.invalidate(memberAssignNotifierProvider);
+
+          if (mounted) {
+            AppSnackBar.show(context, message: 'Successfully Member Assigned To Project', backgroundColor: Colors.green);
+            context.pop();
+          }
+        } else {
+          if (mounted) {
+            AppSnackBar.show(context, message: 'Something went wrong, Try again Later', backgroundColor: Colors.red);
+            context.pop();
+          }
+        }
       } else {
-        ref
-            .read(memberAssignToProjectNotifierProvider.notifier)
-            .assignMemberToProject(id: 0, projectId: selectedProjectID!, memNo: selectedMemberID!, amount: int.parse(amountController.text));
+        if (selectedMemberID != null && selectedProjectID != null) {
+        await  ref
+              .read(memberAssignToProjectNotifierProvider.notifier)
+              .assignMemberToProject(id: 0, projectId: selectedProjectID!, memNo: selectedMemberID!, amount: int.parse(amountController.text));
+          final result = ref.read(memberAssignToProjectNotifierProvider);
+          if (result.hasValue && result.value != null) {
+            ref.invalidate(memberAssignNotifierProvider);
+
+            if (context.mounted) {
+              AppSnackBar.show(context, message: 'Successfully Member Assigned To Project', backgroundColor: Colors.green);
+              context.pop();
+            }
+          } else {
+            if (context.mounted) {
+              AppSnackBar.show(context, message: 'Something went wrong, Try again Later', backgroundColor: Colors.red);
+              context.pop();
+            }
+          }
+        } else {
+          if (context.mounted) {
+            AppSnackBar.show(context, message: 'Please reload this page', backgroundColor: Colors.red);
+            context.pop();
+          }
+        }
       }
     }
   }

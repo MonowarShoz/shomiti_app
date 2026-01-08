@@ -25,11 +25,22 @@ class ProjectInfoScreen extends ConsumerWidget {
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add, color: Colors.black54),
-            onPressed: () {
-              context.pushNamed(Routes.projectEntry);
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+
+            child: IconButton(
+              icon:  Container(
+                  width: 40,
+                  height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                  child: Icon(Icons.add, color: Colors.white)),
+              onPressed: () {
+                context.pushNamed(Routes.projectEntry);
+              },
+            ),
           ),
         ],
       ),

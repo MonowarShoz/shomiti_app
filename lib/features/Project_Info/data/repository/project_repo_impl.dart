@@ -143,7 +143,7 @@ class ProjectInfoRepoImpl implements ProjectRepository {
       final result = await projectInfoRemoteSrc.saveMemberAssignToProject(
         token: 'Bearer $token',
         memberAssignBody: MemberAssignBody(
-          id: 0,
+          id: id,
           amount: amount,
           memNo: memNo,
           assignBy: userJson['username'],

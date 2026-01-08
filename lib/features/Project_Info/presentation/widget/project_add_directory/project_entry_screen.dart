@@ -45,7 +45,7 @@ class _ProjectEntryScreenState extends ConsumerState<ProjectEntryScreen> {
   Widget build(BuildContext context) {
     final projectAddState = ref.watch(projectAddNotifierProvider);
     return Scaffold(
-      appBar: AppBar(title: Text('ADD Project')),
+      appBar: AppBar(title: Text('Add Project'),backgroundColor: Colors.white,foregroundColor: Colors.black,),
       body: Form(
         key: _formKey,
         child: ListView(
