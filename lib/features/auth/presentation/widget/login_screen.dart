@@ -4,6 +4,8 @@ import 'package:imsomitiapp/core/theming/app_assets.dart';
 import 'package:imsomitiapp/features/auth/presentation/login_state_listener.dart';
 import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_provider.dart';
 
+import '../../../../core/base_widget/app_custom_dialog.dart';
+
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -26,12 +28,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final loginState = ref.watch(loginNotifierProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          //const SignInStateListener(),
+          const SignInStateListener(),
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -127,11 +130,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ElevatedButton(
                         onPressed: loginState.isLoading
                             ? null
-                            : () {
+                            : () async{
                                 if (_formKey.currentState!.validate()) {
-                                  ref
+                                await  ref
                                       .read(loginNotifierProvider.notifier)
                                       .login(username: _usernameController.text, password: _passwordController.text);
+                                  // final result = ref.read(loginNotifierProvider);
+                                  // if(result.hasValue && result.value != null){
+                                  //   if(context.mounted){
+                                  //     AppSnackBar.show(context, message: 'Successfully Logged In', backgroundColor: Colors.green);
+                                  //   }
+                                  //
+                                  // }else{
+                                  //   if(context.mounted){
+                                  //     AppSnackBar.show(context, message: 'Login failed', backgroundColor: Colors.red);
+                                  //   }
+                                  // }
                                 }
                               },
                         style: ElevatedButton.styleFrom(

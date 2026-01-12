@@ -171,6 +171,9 @@ class SubmenuScreen extends ConsumerWidget {
       case "Kisti Info":
         context.pushNamed(Routes.kistiInfo);
         break;
+      case "Subscription Info":
+        context.pushNamed(Routes.subscriptionType);
+        break;
       case "Project":
         context.pushNamed(Routes.project);
         break;

@@ -34,7 +34,7 @@ class LoginNotifier extends AsyncNotifier<LoginResponseModel?> {
         ref.invalidate(homeparentMenuNotifierProvider);
         await ref.read(homeparentMenuNotifierProvider.future);
 
-        return AsyncData(user);
+        state = AsyncData(user);
       },
       failure: (errorHandler) {
         print('login error message ${errorHandler.apiErrorModel.message}');

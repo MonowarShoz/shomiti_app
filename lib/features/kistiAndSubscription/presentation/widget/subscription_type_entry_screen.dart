@@ -4,24 +4,27 @@ import 'package:imsomitiapp/core/base_widget/common_form_widget.dart';
 import 'package:imsomitiapp/core/helper/extensions.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/kistiInfo_notifier.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/kisty_save_notifier.dart';
+import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/subscription_type_notifier.dart';
 
 import '../../../../core/base_widget/app_custom_dialog.dart';
 import '../../../Project_Info/presentation/provider/project_info_notifier.dart';
 import '../../data/datasource/Model/KistyTypeInfo.dart';
+import '../../data/datasource/Model/get_subscription_type_model.dart';
+import '../provider/add_subscription_type_notifier.dart';
 import '../provider/crtype_notifier.dart';
 
-class KistiSaveScreen extends ConsumerStatefulWidget {
-  final KistyTypeInfo? editData;
+class SubscriptionTypeEntryScreen extends ConsumerStatefulWidget {
+  final GetSubscriptionTypeModel? editData;
   final BuildContext sheetContext;
   final bool isEditMode;
 
-  const KistiSaveScreen({super.key, required this.sheetContext, this.editData, required this.isEditMode});
+  const SubscriptionTypeEntryScreen({super.key, required this.sheetContext, this.editData, required this.isEditMode});
 
   @override
-  ConsumerState createState() => _KistiSaveScreenState();
+  ConsumerState createState() => _SubscriptionTypeEntryScreenState();
 }
 
-class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
+class _SubscriptionTypeEntryScreenState extends ConsumerState<SubscriptionTypeEntryScreen> {
   final _formKey = GlobalKey<FormState>();
   final typeNameController = TextEditingController();
   final amountController = TextEditingController();
@@ -35,7 +38,7 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
     if (widget.editData != null) {
       id = widget.editData!.id;
       selectedCreditType = widget.editData!.crid;
-      selectedProject = widget.editData!.projectid;
+      selectedProject = widget.editData!.projectId;
       typeNameController.text = widget.editData!.typeName!;
       amountController.text = widget.editData!.amount.toString();
     } else {
@@ -50,7 +53,7 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
   Widget build(BuildContext context) {
     final creditState = ref.watch(creditNotifierProvider);
     final projectState = ref.watch(projectInfoNotifierProvider);
-    final kistiSavestate = ref.watch(kistiTypeSaveNotiferProvider);
+    final subscriptionTypeAddState = ref.watch(subscriptionTypeSaveNotifierProvider);
     return Container(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 40),
       decoration: BoxDecoration(
@@ -74,8 +77,11 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Add Kisti Type',
+                widget.isEditMode ? const Text(
+                  'Edit Subscription Type',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+                ) :  const Text(
+                  'Add Subscription Type',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                 ),
                 const SizedBox(height: 24),
@@ -221,11 +227,11 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: kistiSavestate.isLoading
+                    onPressed: subscriptionTypeAddState.isLoading
                         ? null
                         : () async {
-                            await submitAddKistyType(ref);
-                          },
+                      await submitAddEditSubscriptionType(ref);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
@@ -233,11 +239,11 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       elevation: 0,
                     ),
-                    child: kistiSavestate.isLoading
+                    child: subscriptionTypeAddState.isLoading
                         ? CircularProgressIndicator()
                         : widget.isEditMode
-                        ? const Text('Edit Kisti Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
-                        : const Text('Add Kisti', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        ? const Text('Edit Subscription Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+                        : const Text('Add Subscription Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -249,25 +255,25 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
     );
   }
 
-  Future<void> submitAddKistyType(WidgetRef ref) async {
+  Future<void> submitAddEditSubscriptionType(WidgetRef ref) async {
     if (_formKey.currentState?.validate() ?? false) {
       if (selectedProject != null && selectedCreditType != null) {
         if (widget.isEditMode) {
           await ref
-              .read(kistiTypeSaveNotiferProvider.notifier)
-              .saveKistyType(
-                id: id!,
-                typeName: typeNameController.text,
-                amount: int.parse(amountController.text),
-                projectId: selectedProject!,
-                creditId: selectedCreditType!,
-              );
-          final result = ref.read(kistiTypeSaveNotiferProvider);
+              .read(subscriptionTypeSaveNotifierProvider.notifier)
+              .saveSubscriptionType(
+            id: id!,
+            typeName: typeNameController.text,
+            amount: int.parse(amountController.text),
+            projectId: selectedProject!,
+            creditId: selectedCreditType!,
+          );
+          final result = ref.read(subscriptionTypeSaveNotifierProvider);
           if (result.hasValue && result.value != null) {
-            ref.invalidate(kistiInfoNotifierProvider);
+            ref.invalidate(subscriptionTypeNotifierProvider);
 
             if (mounted) {
-              AppSnackBar.show(context, message: 'Successfully Kisty Type Edited', backgroundColor: Colors.green);
+              AppSnackBar.show(context, message: 'Successfully Subscription Type Edited', backgroundColor: Colors.green);
               context.pop();
             }
           } else {
@@ -278,20 +284,20 @@ class _KistiSaveScreenState extends ConsumerState<KistiSaveScreen> {
           }
         } else {
           await ref
-              .read(kistiTypeSaveNotiferProvider.notifier)
-              .saveKistyType(
-                id: 0,
-                typeName: typeNameController.text,
-                amount: int.parse(amountController.text),
-                projectId: selectedProject!,
-                creditId: selectedCreditType!,
-              );
-          final result = ref.read(kistiTypeSaveNotiferProvider);
+              .read(subscriptionTypeSaveNotifierProvider.notifier)
+              .saveSubscriptionType(
+            id: 0,
+            typeName: typeNameController.text,
+            amount: int.parse(amountController.text),
+            projectId: selectedProject!,
+            creditId: selectedCreditType!,
+          );
+          final result = ref.read(subscriptionTypeSaveNotifierProvider);
           if (result.hasValue && result.value != null) {
-            ref.invalidate(kistiInfoNotifierProvider);
+            ref.invalidate(subscriptionTypeNotifierProvider);
 
             if (mounted) {
-              AppSnackBar.show(context, message: 'Successfully Kisty Type added', backgroundColor: Colors.green);
+              AppSnackBar.show(context, message: 'Successfully Subscription Type added', backgroundColor: Colors.green);
               context.pop();
             }
           } else {

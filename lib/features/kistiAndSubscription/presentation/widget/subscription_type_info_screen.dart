@@ -2,17 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/provider/kistiInfo_notifier.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/kisti_save_screen.dart';
+import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/subscription_type_entry_screen.dart';
 
 import '../../../../core/base_widget/empy_state_widget.dart';
 import '../../../../core/base_widget/error_state_widget.dart';
 import '../../data/datasource/Model/KistyTypeInfo.dart';
+import '../../data/datasource/Model/get_subscription_type_model.dart';
+import '../provider/subscription_type_notifier.dart';
 
-class KistiInfoScreen extends ConsumerWidget {
-  const KistiInfoScreen({super.key});
+class SubscriptionTypeInfoScreen extends ConsumerWidget {
+  const SubscriptionTypeInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kistiState = ref.watch(kistiInfoNotifierProvider);
+    final subscriptionTypeState = ref.watch(subscriptionTypeNotifierProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -22,7 +25,7 @@ class KistiInfoScreen extends ConsumerWidget {
         elevation: 0,
         foregroundColor: Colors.black,
         title: const Text(
-          'Kisti Type Info',
+          'Subscription Type Info',
           style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
         ),
         actions: [
@@ -34,7 +37,7 @@ class KistiInfoScreen extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
-                  builder: (shContext) => KistiSaveScreen(sheetContext: shContext,isEditMode: false,),
+                  builder: (shContext) => SubscriptionTypeEntryScreen(sheetContext: shContext,isEditMode: false,),
                 );
               },
               icon: Container(
@@ -47,7 +50,7 @@ class KistiInfoScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: kistiState.when(
+      body: subscriptionTypeState.when(
         data: (data) {
           if (data.isEmpty) {
             return const EmptyState(message: 'No records yet', icon: Icons.receipt_long_outlined);
@@ -57,8 +60,8 @@ class KistiInfoScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             itemCount: data.length,
             itemBuilder: (context, index) {
-              final kisti = data[index];
-              return _buildKistiItem(kisti,context);
+              final subscriptionType = data[index];
+              return _buildSubsctiptionTypeItem(subscriptionType,context);
             },
           );
         },
@@ -72,7 +75,7 @@ class KistiInfoScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildKistiItem(KistyTypeInfo kisti, BuildContext ctx) {
+  Widget _buildSubsctiptionTypeItem(GetSubscriptionTypeModel subscrpType, BuildContext ctx) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
@@ -96,7 +99,7 @@ class KistiInfoScreen extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(
-                  kisti.typeName ?? 'N/A',
+                  subscrpType.typeName ?? 'N/A',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -111,9 +114,9 @@ class KistiInfoScreen extends ConsumerWidget {
                     context: ctx,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (shContext) => KistiSaveScreen(
+                    builder: (shContext) => SubscriptionTypeEntryScreen(
                       sheetContext: shContext,
-                      editData: kisti,
+                      editData: subscrpType,
                       isEditMode: true,
                     ),
                   );
@@ -141,7 +144,7 @@ class KistiInfoScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '৳${kisti.amount?.toStringAsFixed(0) ?? '0'}',
+                '৳${subscrpType.amount?.toStringAsFixed(0) ?? '0'}',
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
@@ -155,16 +158,16 @@ class KistiInfoScreen extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: kisti.crname == 'Debit'
+                    color: subscrpType.crname == 'Debit'
                         ? Colors.red[50]
                         : Colors.green[50],
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    kisti.crname ?? 'N/A',
+                    subscrpType.crname ?? 'N/A',
                     style: TextStyle(
                       fontSize: 12,
-                      color: kisti.crname == 'Debit'
+                      color: subscrpType.crname == 'Debit'
                           ? Colors.red[600]
                           : Colors.green[600],
                       fontWeight: FontWeight.w600,
@@ -177,7 +180,7 @@ class KistiInfoScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Project name
-          if (kisti.projectname != null && kisti.projectname!.isNotEmpty)
+          if (subscrpType.projectName != null && subscrpType.projectName!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
@@ -186,7 +189,7 @@ class KistiInfoScreen extends ConsumerWidget {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      kisti.projectname!,
+                      subscrpType.projectName!,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[600],
@@ -203,7 +206,7 @@ class KistiInfoScreen extends ConsumerWidget {
               Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[400]),
               const SizedBox(width: 6),
               Text(
-                kisti.createdate ?? 'N/A',
+                subscrpType.createdate ?? 'N/A',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey[400],

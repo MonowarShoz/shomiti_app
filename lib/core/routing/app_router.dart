@@ -11,6 +11,7 @@ import 'package:imsomitiapp/features/auth/presentation/provider/login_notifier_p
 import 'package:imsomitiapp/features/auth/presentation/widget/login_screen.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/kisti_info_screen.dart';
 import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/kisti_save_screen.dart';
+import 'package:imsomitiapp/features/kistiAndSubscription/presentation/widget/subscription_type_info_screen.dart';
 import 'package:imsomitiapp/features/splash/presentation/splash_screen.dart';
 
 import '../../features/Member_info/presentation/widget/member_info_screen.dart';
@@ -80,7 +81,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: Routes.project,name: Routes.project,builder: (context, state) => ProjectInfoScreen(),),
       GoRoute(path: Routes.projectEntry, name: Routes.projectEntry, builder: (context, state) => ProjectEntryScreen()),
        GoRoute(path: Routes.memberAssign, name: Routes.memberAssign, builder: (context, state) => MemberAssignInfoScreen()),
-       //GoRoute(path: Routes.memberAssignEntry, name: Routes.memberAssignEntry, builder: (context, state) => MembeAss()),
+       GoRoute(path: Routes.subscriptionType, name: Routes.subscriptionType, builder: (context, state) => SubscriptionTypeInfoScreen()),
 
       // GoRoute(path: Routes.hwMap, name: Routes.hwMap, builder: (context, state) => HomeworkMapScreen()),
       // GoRoute(path: Routes.notice, name: Routes.notice, builder: (context, state) => NoticeListScreen()),

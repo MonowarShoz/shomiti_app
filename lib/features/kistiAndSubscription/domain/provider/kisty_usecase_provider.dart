@@ -4,6 +4,8 @@ import 'package:imsomitiapp/features/kistiAndSubscription/domain/usecase/kisty_t
 
 import '../../data/provider/kisty_remote_src_provider.dart';
 import '../usecase/crtype_usecase.dart';
+import '../usecase/subscription_type_save_usecase.dart';
+import '../usecase/subscription_type_usecase.dart';
 
 final crtypeUsecaseProvider = FutureProvider<CrTypeUsecase>((ref) async {
   final kistirepo = await ref.read(kistyRepoProvider.future);
@@ -18,5 +20,15 @@ final kistiInfoUsecaseProvider = FutureProvider<KistyTypeInfoUsecase>((ref) asyn
 final kistiSaveusecaseProvider = FutureProvider<KistySaveUsecase>((ref) async{
   final kistirepo = await ref.read(kistyRepoProvider.future);
   return KistySaveUsecase(kistyRepository: kistirepo);
+
+},);
+
+final subscriptionTypeUsecaseProvider = FutureProvider<SubscriptionTypeUsecase>((ref) async {
+  final kistirepo = await ref.read(kistyRepoProvider.future);
+  return SubscriptionTypeUsecase(kistyRepository: kistirepo);
+});
+final addSubsctiptionTypeUsecaseProvider = FutureProvider<SubscriptionTypeSaveUsecase>((ref) async{
+  final kistirepo = await ref.read(kistyRepoProvider.future);
+  return SubscriptionTypeSaveUsecase(kistyRepository: kistirepo);
 
 },);
