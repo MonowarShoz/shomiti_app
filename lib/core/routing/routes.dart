@@ -13,6 +13,7 @@ class Routes {
   static const String subMenu = '/submenu';
   static const String kistiInfo ='/kistiInfo';
   static const String kistiSave = '/kistiSave';
+  static const String subscriptionType = '/subscriptionType';
   static const String project = '/project';
   static const String projectEntry = '/projectEntry';
   static const String memberAssign = '/memberAssign';

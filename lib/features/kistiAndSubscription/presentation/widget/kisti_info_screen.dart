@@ -72,53 +72,145 @@ class KistiInfoScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildKistiItem(KistyTypeInfo kisti,BuildContext ctx) {
+  Widget _buildKistiItem(KistyTypeInfo kisti, BuildContext ctx) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header row with title and edit button
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Text(
-                  kisti.typeName ?? '',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
+                  kisti.typeName ?? 'N/A',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
-              Text(
-                kisti.crname ?? '0',
-                style: TextStyle(fontSize: 13, color: kisti.crname == 'Debit' ? Colors.red[400] : Colors.green[400], fontWeight: FontWeight.w500),
-              ),
+              const SizedBox(width: 12),
               InkWell(
                 onTap: () {
                   showModalBottomSheet(
                     context: ctx,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (shContext) => KistiSaveScreen(sheetContext: shContext, editData: kisti, isEditMode: true),
+                    builder: (shContext) => KistiSaveScreen(
+                      sheetContext: shContext,
+                      editData: kisti,
+                      isEditMode: true,
+                    ),
                   );
                 },
+                borderRadius: BorderRadius.circular(20),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(20)),
-                  child: Icon(Icons.edit),
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(
+                    Icons.edit,
+                    size: 18,
+                    color: Colors.green[700],
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            '৳${kisti.amount!.toStringAsFixed(0)}',
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black, letterSpacing: -0.5),
+
+          // Amount and transaction type row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '৳${kisti.amount?.toStringAsFixed(0) ?? '0'}',
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: kisti.crname == 'Debit'
+                        ? Colors.red[50]
+                        : Colors.green[50],
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    kisti.crname ?? 'N/A',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: kisti.crname == 'Debit'
+                          ? Colors.red[600]
+                          : Colors.green[600],
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
-          Text(kisti.projectname ?? '', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-          const SizedBox(height: 8),
-          Text(kisti.createdate!, style: TextStyle(fontSize: 12, color: Colors.grey[400])),
+
+          // Project name
+          if (kisti.projectname != null && kisti.projectname!.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Icon(Icons.folder_outlined, size: 16, color: Colors.grey[600]),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      kisti.projectname!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // Date
+          Row(
+            children: [
+              Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[400]),
+              const SizedBox(width: 6),
+              Text(
+                kisti.createdate ?? 'N/A',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[400],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
