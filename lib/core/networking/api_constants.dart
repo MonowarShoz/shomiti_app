@@ -49,6 +49,9 @@ class ApiConstants {
   static const String getBalanceWithdraw = "/api/AccountCtrl/get-Balance-withdraw";
   static const String saveBalanceWithdraw = "/api/AccountCtrl/save-withdraw";
   static const String saveBalanceSegment = "/api/AccountCtrl/savebalancesegment";
+  static const String getvendor = "/api/AccountCtrl/vendor";
+  static const String accountBalance = "/api/AccountCtrl/accountbalance";
+
 
  
 
