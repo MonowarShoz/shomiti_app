@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:imsomitiapp/core/networking/api_result.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/balance_add_history_model.dart';
 import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/balance_segment_save_model.dart';
 import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/get_bal_withdraw_model.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/get_vendor_model.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/save_kisti_rec_body.dart';
 import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/save_withdraw_model.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/total_balance_model.dart';
 import 'package:imsomitiapp/features/Accounts/domain/repository/accounts_repository.dart';
 
 import '../../../../core/networking/api_constants.dart';
@@ -59,6 +63,30 @@ class AccountRepositoryImpl extends AccountsRepository{
   @override
   Future<ApiResult<String?>> saveBalanceWithdraw({required SaveWithDrawModel saveWithdrawData}) {
     // TODO: implement saveBalanceWithdraw
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<List<BalanceAddHistoryModel>>> getBalanceAddHistory({required int compID}) {
+    // TODO: implement getBalanceAddHistory
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<List<TotalBalanceModel>>> getTotalBalance({required int compID}) {
+    // TODO: implement getTotalBalance
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<List<GetVendorModel>>> getVendors() {
+    // TODO: implement getVendors
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<String?>> saveKistiReceive({required SaveKistiReceiveBody kistiReceiveBody}) {
+    // TODO: implement saveKistiReceive
     throw UnimplementedError();
   }
 

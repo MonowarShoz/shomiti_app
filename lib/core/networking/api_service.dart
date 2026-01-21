@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/balance_add_history_model.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/get_vendor_model.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/save_kisti_rec_body.dart';
+import 'package:imsomitiapp/features/Accounts/data/datasource/remote/Model/total_balance_model.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/child_menu_model.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/home_menu_model.dart';
 import 'package:imsomitiapp/features/Home/data/datasource/remote/model/parent_menu_model.dart';
@@ -77,7 +81,15 @@ abstract class ApiService {
   Future<List<GetBalanceWithdrawModel>> getBalanceWithdraw(@Header("Authorization") String token, @Query("compId") int companyId);
   @POST(ApiConstants.saveBalanceSegment)
   Future<String> saveBalance(@Header("Authorization") String token, @Body() BalanceSegmentSaveModel balanceSegmentSaveBody);
+  @GET(ApiConstants.balanceAddHistory)
+  Future<List<BalanceAddHistoryModel>> getBalanceAddHistory(@Header("Authorization") String token, @Query("compId") int companyId);
+  @GET(ApiConstants.accountBalance)
+  Future<List<TotalBalanceModel>> totalBalance(@Header("Authorization") String token,@Query("compId") int companyId);
+  @GET(ApiConstants.getvendor)
+  Future<List<GetVendorModel>> vendorData(@Header("Authorization") String token);
   @POST(ApiConstants.saveBalanceWithdraw)
   Future<String> saveWithdraw(@Header("Authorization") String token, @Body() SaveWithDrawModel saveWithdrawBody);
+  @POST(ApiConstants.kistiReceive)
+  Future<String> saveKistiReceive(@Header("Authorization") String token, @Body() SaveKistiReceiveBody saveKistiRecBody);
 
 }
