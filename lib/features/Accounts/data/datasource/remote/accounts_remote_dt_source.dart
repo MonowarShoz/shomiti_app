@@ -13,13 +13,13 @@ abstract class AccountsRemoteDataSource {
 
   Future<ApiResult<String?>> saveBalanceWithdraw({required String token, required SaveWithDrawModel saveWithdrawData});
 
-  Future<ApiResult<List<GetBalanceWithdrawModel>>> getBalWithdrawData({required String token, required int compID});
+  Future<ApiResult<List<GetBalanceWithdrawModel>?>> getBalWithdrawData({required String token, required int compID});
 
-  Future<List<BalanceAddHistoryModel>> getBalanceAddHistory({required String token, required int companyId});
+  Future<ApiResult<List<BalanceAddHistoryModel>?>> getBalanceAddHistory({required String token, required int companyId});
 
-  Future<List<TotalBalanceModel>> getTotalBalance({required String token, required int companyId});
+  Future<ApiResult<List<TotalBalanceModel>?>> getTotalBalance({required String token, required int companyId});
 
-  Future<List<GetVendorModel>> getVendors({required String token});
+  Future<ApiResult<List<GetVendorModel>?>> getVendors({required String token});
 
-  Future<String> saveKistiReceive({required String token, required SaveKistiReceiveBody body});
+  Future<ApiResult<String?>> saveKistiReceive({required String token, required SaveKistiReceiveBody body});
 }

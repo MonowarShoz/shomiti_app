@@ -3,9 +3,9 @@ import 'package:imsomitiapp/features/Accounts/domain/repository/accounts_reposit
 import '../../../../core/networking/api_result.dart';
 import '../../data/datasource/remote/Model/balance_segment_save_model.dart';
 
-class AccBalanceUsecase {
+class SaveBalanceSegementUsecase {
   final AccountsRepository accountsRepository;
-  AccBalanceUsecase({required this.accountsRepository});
+  SaveBalanceSegementUsecase({required this.accountsRepository});
 
   Future<ApiResult<String?>> call({required BalanceSegmentSaveModel balanceSegmentBody}) async{
     return accountsRepository.saveBalanceSegmentInfo(balanceSegmentBody: balanceSegmentBody);

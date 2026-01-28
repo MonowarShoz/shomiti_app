@@ -29,6 +29,4 @@ class CrtypeNotifier extends AsyncNotifier<List<CrtypeModel>> {
   }
 }
 
-final creditNotifierProvider = AsyncNotifierProvider<CrtypeNotifier, List<CrtypeModel>>(() {
-  return CrtypeNotifier();
-});
+final creditNotifierProvider = AsyncNotifierProvider<CrtypeNotifier, List<CrtypeModel>>(CrtypeNotifier.new);

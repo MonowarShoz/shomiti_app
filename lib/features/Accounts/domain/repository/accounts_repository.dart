@@ -10,19 +10,19 @@ import '../../data/datasource/remote/Model/total_balance_model.dart';
 abstract class AccountsRepository {
   Future<ApiResult<String?>> saveBalanceSegmentInfo({required BalanceSegmentSaveModel balanceSegmentBody});
   Future<ApiResult<String?>> saveBalanceWithdraw({ required SaveWithDrawModel saveWithdrawData});
-  Future<ApiResult<List<GetBalanceWithdrawModel>>> getBalWithdrawData({required int compID});
+  Future<ApiResult<List<GetBalanceWithdrawModel>?>> getBalWithdrawData({required int compID});
   /// Get balance add history
-  Future<ApiResult<List<BalanceAddHistoryModel>>> getBalanceAddHistory({
+  Future<ApiResult<List<BalanceAddHistoryModel>?>> getBalanceAddHistory({
     required int compID,
   });
 
   /// Get total account balance
-  Future<ApiResult<List<TotalBalanceModel>>> getTotalBalance({
+  Future<ApiResult<List<TotalBalanceModel>?>> getTotalBalance({
     required int compID,
   });
 
   /// Get vendor list
-  Future<ApiResult<List<GetVendorModel>>> getVendors();
+  Future<ApiResult<List<GetVendorModel>?>> getVendors();
 
   /// Save kisti receive
   Future<ApiResult<String?>> saveKistiReceive({

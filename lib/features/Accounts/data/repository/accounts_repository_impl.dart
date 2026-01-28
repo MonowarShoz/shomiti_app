@@ -139,26 +139,144 @@ class AccountRepositoryImpl extends AccountsRepository {
   }
 
   @override
-  Future<ApiResult<List<BalanceAddHistoryModel>>> getBalanceAddHistory({required int compID}) {
-    // TODO: implement getBalanceAddHistory
-    throw UnimplementedError();
+  Future<ApiResult<List<BalanceAddHistoryModel>?>> getBalanceAddHistory({required int compID}) async {
+    try {
+      final token = await localDataSource.getToken();
+      final userData = await localDataSource.getUserInformation();
+      if ((token?.isEmpty ?? true) && (userData?.isEmpty ?? true)) {
+        return ApiResult.failure(
+          ApiErrorHandler.handle(ApiErrors.unauthorizedError),
+          //ApiErrorHandler.handle(ApiErrorModel(code: 401,message: 'UnAuthorized')),
+        );
+      }
+      final Map userJson = jsonDecode(userData!);
+      final result = await accountsRemoteDataSource.getBalanceAddHistory(token: 'Bearer $token', companyId: userJson['cid']);
+
+      return result.when(
+        success: (data) {
+          if (data != null) {
+            return ApiResult.success(data);
+          } else {
+            return ApiResult.failure(ApiErrorHandler.handle(ApiErrors.noContent));
+          }
+        },
+        failure: (errorHandler) {
+          return ApiResult.failure(ApiErrorHandler.handle(errorHandler));
+        },
+      );
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
   }
 
   @override
-  Future<ApiResult<List<TotalBalanceModel>>> getTotalBalance({required int compID}) {
-    // TODO: implement getTotalBalance
-    throw UnimplementedError();
+  Future<ApiResult<List<TotalBalanceModel>>> getTotalBalance({required int compID}) async {
+    try {
+      final token = await localDataSource.getToken();
+      final userData = await localDataSource.getUserInformation();
+      if ((token?.isEmpty ?? true) && (userData?.isEmpty ?? true)) {
+        return ApiResult.failure(
+          ApiErrorHandler.handle(ApiErrors.unauthorizedError),
+          //ApiErrorHandler.handle(ApiErrorModel(code: 401,message: 'UnAuthorized')),
+        );
+      }
+      final Map userJson = jsonDecode(userData!);
+      final result = await accountsRemoteDataSource.getTotalBalance(token: 'Bearer $token', companyId: userJson['cid']);
+
+      return result.when(
+        success: (data) {
+          if (data != null) {
+            return ApiResult.success(data);
+          } else {
+            return ApiResult.failure(ApiErrorHandler.handle(ApiErrors.noContent));
+          }
+        },
+        failure: (errorHandler) {
+          return ApiResult.failure(ApiErrorHandler.handle(errorHandler));
+        },
+      );
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
   }
 
   @override
-  Future<ApiResult<List<GetVendorModel>>> getVendors() {
-    // TODO: implement getVendors
-    throw UnimplementedError();
+  Future<ApiResult<List<GetVendorModel>>> getVendors() async {
+    try {
+      final token = await localDataSource.getToken();
+      //final userData = await localDataSource.getUserInformation();
+      if ((token?.isEmpty ?? true) ) {
+        return ApiResult.failure(
+          ApiErrorHandler.handle(ApiErrors.unauthorizedError),
+          //ApiErrorHandler.handle(ApiErrorModel(code: 401,message: 'UnAuthorized')),
+        );
+      }
+     // final Map userJson = jsonDecode(userData!);
+      final result = await accountsRemoteDataSource.getVendors(token: 'Bearer $token');
+
+      return result.when(
+        success: (data) {
+          if (data != null) {
+            return ApiResult.success(data);
+          } else {
+            return ApiResult.failure(ApiErrorHandler.handle(ApiErrors.noContent));
+          }
+        },
+        failure: (errorHandler) {
+          return ApiResult.failure(ApiErrorHandler.handle(errorHandler));
+        },
+      );
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
   }
 
   @override
-  Future<ApiResult<String?>> saveKistiReceive({required SaveKistiReceiveBody kistiReceiveBody}) {
-    // TODO: implement saveKistiReceive
-    throw UnimplementedError();
+  Future<ApiResult<String?>> saveKistiReceive({required SaveKistiReceiveBody kistiReceiveBody}) async {
+    try {
+      final token = await localDataSource.getToken();
+      final userData = await localDataSource.getUserInformation();
+      if ((token?.isEmpty ?? true) && (userData?.isEmpty ?? true)) {
+        return ApiResult.failure(
+          ApiErrorHandler.handle(ApiErrors.unauthorizedError),
+          //ApiErrorHandler.handle(ApiErrorModel(code: 401,message: 'UnAuthorized')),
+        );
+      }
+      final Map userJson = jsonDecode(userData!);
+      final result = await accountsRemoteDataSource.saveKistiReceive(
+        token: 'Bearer $token',
+        body: SaveKistiReceiveBody(
+          projectid: kistiReceiveBody.projectid,
+          compId: userJson['cid'],
+          recamount: kistiReceiveBody.recamount,
+          remark: kistiReceiveBody.remark,
+
+          transby: userJson['username'],
+          recdate: kistiReceiveBody.recdate,
+          //""
+          recyear: kistiReceiveBody.recyear,
+          recmonth: kistiReceiveBody.recmonth,
+          typeid: kistiReceiveBody.typeid,
+
+
+          paybleamount: kistiReceiveBody.paybleamount,
+          memNo: kistiReceiveBody.memNo,
+        ),
+      );
+      return result.when(
+        success: (data) {
+          if (data != null) {
+            return ApiResult.success(data);
+          } else {
+            return ApiResult.failure(ApiErrorHandler.handle('No content'));
+          }
+        },
+        failure: (errorHandler) {
+          return ApiResult.failure(errorHandler);
+        },
+      );
+    } catch (e) {
+      return ApiResult.failure(ApiErrorHandler.handle(e));
+    }
   }
 }
